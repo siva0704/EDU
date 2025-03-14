@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from "@/context/AuthContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Recordings from "./pages/Recordings";
+import RecordingDetail from "./pages/RecordingDetail";
 import Attendance from "./pages/Attendance";
 import LessonPlans from "./pages/LessonPlans";
 import Contacts from "./pages/Contacts";
@@ -37,6 +38,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/recordings" element={<Recordings />} />
+      <Route path="/recordings/:id" element={<RecordingDetail />} />
       <Route path="/attendance" element={<Attendance />} />
       <Route path="/lesson-plans" element={<LessonPlans />} />
       <Route path="/contacts" element={<Contacts />} />

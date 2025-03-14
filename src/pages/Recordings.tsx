@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import VideoCard, { VideoProps } from '../components/VideoCard';
@@ -8,9 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Download, Filter, Plus, Search } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
+import AddRecordingModal from '../components/recordings/AddRecordingModal';
+import RecordingsFilter from '../components/recordings/RecordingsFilter';
 
 // Sample data
-const sampleVideos: VideoProps[] = [
+export const sampleVideos: VideoProps[] = [
   {
     id: '1',
     title: 'Introduction to Algebra',
@@ -74,14 +77,23 @@ const sampleVideos: VideoProps[] = [
 ];
 
 const Recordings = () => {
+  const navigate = useNavigate();
   const { role } = useAuth();
   const { downloadAllResources } = useDownloadUtils();
   const [searchTerm, setSearchTerm] = useState('');
+  const [videos, setVideos] = useState<VideoProps[]>(sampleVideos);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({
+    subjects: [] as string[],
+    teachers: [] as string[],
+    dateRange: 'all' as 'all' | 'today' | 'week' | 'month'
+  });
   
   const canAdd = role === 'admin' || role === 'teacher';
   
   const handleDownloadAll = () => {
-    const resources = sampleVideos.map(video => ({
+    const resources = videos.map(video => ({
       id: video.id,
       title: video.title,
       type: 'video',
@@ -92,29 +104,67 @@ const Recordings = () => {
   };
   
   const handleAddNew = () => {
-    toast({
-      title: "Add New Recording",
-      description: "Opening form to add a new class recording.",
-    });
-    // In a real app, this would open a form to add a new recording
-    console.log("Opening add new recording form");
+    setIsAddModalOpen(true);
   };
   
   const handleFilter = () => {
-    toast({
-      title: "Filter Options",
-      description: "Opening filter options for recordings.",
-    });
-    // In a real app, this would open filter options
-    console.log("Opening filter options");
+    setIsFilterOpen(true);
   };
   
-  const filteredVideos = sampleVideos.filter(
-    video => 
+  const handleSaveRecording = (recording: Omit<VideoProps, 'id'>) => {
+    // Generate a new ID (in a real app, this would be handled by the backend)
+    const newId = (videos.length + 1).toString();
+    const newRecording = { ...recording, id: newId };
+    
+    // Add the new recording to the list
+    setVideos(prev => [newRecording, ...prev]);
+    
+    toast({
+      title: "Recording Added",
+      description: `Successfully added "${recording.title}"`,
+    });
+  };
+  
+  const handleApplyFilter = (filterOptions: {
+    subjects: string[];
+    teachers: string[];
+    dateRange: 'all' | 'today' | 'week' | 'month';
+  }) => {
+    setActiveFilters(filterOptions);
+    
+    toast({
+      title: "Filters Applied",
+      description: "The recordings list has been filtered according to your criteria.",
+    });
+  };
+  
+  // Apply filters and search
+  const filteredVideos = videos.filter(video => {
+    // Search term filter
+    const matchesSearch = 
       video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       video.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      video.teacher.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      video.teacher.toLowerCase().includes(searchTerm.toLowerCase());
+      
+    // Subject filter
+    const matchesSubject = 
+      activeFilters.subjects.length === 0 || 
+      activeFilters.subjects.includes(video.subject);
+      
+    // Teacher filter
+    const matchesTeacher = 
+      activeFilters.teachers.length === 0 || 
+      activeFilters.teachers.includes(video.teacher);
+      
+    // Date filter (simplified for demo)
+    const matchesDate = activeFilters.dateRange === 'all' || true;
+    
+    return matchesSearch && matchesSubject && matchesTeacher && matchesDate;
+  });
+  
+  const handlePlayVideo = (videoId: string) => {
+    navigate(`/recordings/${videoId}`);
+  };
   
   return (
     <div className="flex min-h-screen bg-background">
@@ -157,25 +207,47 @@ const Recordings = () => {
               />
             </div>
             
-            <Button variant="outline" className="h-10 sm:w-auto w-full" onClick={handleFilter}>
+            <Button 
+              variant="outline" 
+              className={`h-10 sm:w-auto w-full ${activeFilters.subjects.length > 0 || activeFilters.teachers.length > 0 ? 'bg-primary/10' : ''}`} 
+              onClick={handleFilter}
+            >
               <Filter className="h-4 w-4 mr-2" />
-              Filter
+              Filter{activeFilters.subjects.length > 0 || activeFilters.teachers.length > 0 ? ' (Active)' : ''}
             </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredVideos.map((video) => (
-              <VideoCard key={video.id} video={video} />
+              <VideoCard 
+                key={video.id} 
+                video={video} 
+                onPlay={() => handlePlayVideo(video.id)}
+              />
             ))}
           </div>
           
           {filteredVideos.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No recordings found. Try a different search term.</p>
+              <p className="text-muted-foreground">No recordings found. Try a different search term or adjust your filters.</p>
             </div>
           )}
         </main>
       </div>
+      
+      {/* Modals */}
+      <AddRecordingModal 
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleSaveRecording}
+      />
+      
+      <RecordingsFilter
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        videos={videos}
+        onApplyFilter={handleApplyFilter}
+      />
     </div>
   );
 };
