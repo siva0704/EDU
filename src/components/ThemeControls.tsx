@@ -18,18 +18,6 @@ const ThemeControls = () => {
           <Moon className="h-4 w-4 mr-2" />
           <span className="sr-only sm:not-sr-only">Dark</span>
         </ToggleGroupItem>
-        <ToggleGroupItem value="purple" aria-label="Purple theme" className="px-3">
-          <div className="h-4 w-4 rounded-full bg-theme-purple mr-2" />
-          <span className="sr-only sm:not-sr-only">Purple</span>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="blue" aria-label="Blue theme" className="px-3">
-          <div className="h-4 w-4 rounded-full bg-theme-blue mr-2" />
-          <span className="sr-only sm:not-sr-only">Blue</span>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="green" aria-label="Green theme" className="px-3">
-          <div className="h-4 w-4 rounded-full bg-theme-green mr-2" />
-          <span className="sr-only sm:not-sr-only">Green</span>
-        </ToggleGroupItem>
       </ToggleGroup>
     </div>
   );

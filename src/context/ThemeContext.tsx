@@ -1,13 +1,13 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type Theme = 'light' | 'dark' | 'purple' | 'blue' | 'green';
+export type Theme = 'light' | 'dark';
 
 export type ThemeInfo = {
   id: Theme;
   name: string;
   description: string;
-  intent: 'neutral' | 'creative' | 'professional' | 'nature';
+  intent: 'neutral';
 };
 
 export const themeData: Record<Theme, ThemeInfo> = {
@@ -22,24 +22,6 @@ export const themeData: Record<Theme, ThemeInfo> = {
     name: 'Dark Mode', 
     description: 'Reduced eye strain in low light',
     intent: 'neutral'
-  },
-  'purple': { 
-    id: 'purple', 
-    name: 'Creative Purple', 
-    description: 'Inspiring, creative mindset',
-    intent: 'creative'
-  },
-  'blue': { 
-    id: 'blue', 
-    name: 'Professional Blue', 
-    description: 'Focus and productivity',
-    intent: 'professional'
-  },
-  'green': { 
-    id: 'green', 
-    name: 'Natural Green', 
-    description: 'Calm, balanced atmosphere',
-    intent: 'nature'
   }
 };
 
