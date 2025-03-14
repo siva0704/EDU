@@ -10,6 +10,9 @@ interface User {
   email: string;
   role: UserRole;
   avatar?: string;
+  lastLogin?: string;
+  department?: string;
+  position?: string;
 }
 
 interface AuthContextType {
@@ -28,27 +31,38 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const getUserData = (role: UserRole): User | null => {
   if (!role) return null;
   
+  const currentDate = new Date().toLocaleString();
+  
   const mockUsers: Record<string, User> = {
     admin: {
       id: 'admin-1',
       name: 'Admin User',
       email: 'admin@example.com',
       role: 'admin',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin'
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
+      lastLogin: currentDate,
+      department: 'IT Department',
+      position: 'System Administrator'
     },
     teacher: {
       id: 'teacher-1',
       name: 'Teacher User',
       email: 'teacher@example.com',
       role: 'teacher',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=teacher'
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=teacher',
+      lastLogin: currentDate,
+      department: 'Science Department',
+      position: 'Senior Lecturer'
     },
     student: {
       id: 'student-1',
       name: 'Student User',
       email: 'student@example.com',
       role: 'student',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student'
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student',
+      lastLogin: currentDate,
+      department: 'Computer Science',
+      position: 'Undergraduate Student'
     }
   };
   
@@ -92,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     toast({
       title: "Logged in successfully",
-      description: `You are now logged in as ${role}.`,
+      description: `Welcome, ${userData?.name}! You are now logged in as ${role}.`,
     });
   };
   
