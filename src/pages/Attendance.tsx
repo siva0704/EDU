@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -11,6 +12,7 @@ import { Download, Plus, FileText, Clock, Calendar } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import ThemeControls from '@/components/ThemeControls';
 
 const sampleAttendanceRecords: AttendanceRecord[] = [
   {
@@ -270,6 +272,8 @@ const Attendance = () => {
         onClose={() => setAddModalOpen(false)}
         onSave={handleSaveNewRecord}
       />
+      
+      <ThemeControls />
     </div>
   );
 };

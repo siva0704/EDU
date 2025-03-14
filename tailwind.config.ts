@@ -66,6 +66,11 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				theme: {
+					purple: 'hsl(270, 65%, 60%)',
+					blue: 'hsl(220, 70%, 50%)',
+					green: 'hsl(160, 70%, 40%)'
 				}
 			},
 			borderRadius: {

@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root, .light {
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
@@ -85,6 +85,123 @@
     --sidebar-border: 222 47% 15%;
     --sidebar-ring: 224 71% 45%;
   }
+
+  .purple {
+    --background: 260 20% 99%;
+    --foreground: 270 25% 15%;
+
+    --card: 260 20% 99%;
+    --card-foreground: 270 25% 15%;
+
+    --popover: 260 20% 99%;
+    --popover-foreground: 270 25% 15%;
+
+    --primary: 270 65% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 20% 94%;
+    --secondary-foreground: 270 25% 15%;
+
+    --muted: 270 20% 94%;
+    --muted-foreground: 270 15% 40%;
+
+    --accent: 270 20% 94%;
+    --accent-foreground: 270 25% 15%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 270 20% 90%;
+    --input: 270 20% 90%;
+    --ring: 270 65% 60%;
+
+    --sidebar-background: 270 30% 96%;
+    --sidebar-foreground: 270 25% 15%;
+    --sidebar-primary: 270 65% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 20% 94%;
+    --sidebar-accent-foreground: 270 25% 15%;
+    --sidebar-border: 270 20% 90%;
+    --sidebar-ring: 270 65% 60%;
+  }
+
+  .blue {
+    --background: 210 50% 98%;
+    --foreground: 220 50% 15%;
+
+    --card: 210 50% 98%;
+    --card-foreground: 220 50% 15%;
+
+    --popover: 210 50% 98%;
+    --popover-foreground: 220 50% 15%;
+
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 220 50% 15%;
+
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 15% 40%;
+
+    --accent: 220 20% 94%;
+    --accent-foreground: 220 50% 15%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 90%;
+    --input: 220 20% 90%;
+    --ring: 220 70% 50%;
+
+    --sidebar-background: 220 30% 96%;
+    --sidebar-foreground: 220 50% 15%;
+    --sidebar-primary: 220 70% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 20% 94%;
+    --sidebar-accent-foreground: 220 50% 15%;
+    --sidebar-border: 220 20% 90%;
+    --sidebar-ring: 220 70% 50%;
+  }
+
+  .green {
+    --background: 150 50% 98%;
+    --foreground: 160 50% 15%;
+
+    --card: 150 50% 98%;
+    --card-foreground: 160 50% 15%;
+
+    --popover: 150 50% 98%;
+    --popover-foreground: 160 50% 15%;
+
+    --primary: 160 70% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 20% 94%;
+    --secondary-foreground: 160 50% 15%;
+
+    --muted: 160 20% 94%;
+    --muted-foreground: 160 15% 40%;
+
+    --accent: 160 20% 94%;
+    --accent-foreground: 160 50% 15%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 20% 90%;
+    --input: 160 20% 90%;
+    --ring: 160 70% 40%;
+
+    --sidebar-background: 160 30% 96%;
+    --sidebar-foreground: 160 50% 15%;
+    --sidebar-primary: 160 70% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 20% 94%;
+    --sidebar-accent-foreground: 160 50% 15%;
+    --sidebar-border: 160 20% 90%;
+    --sidebar-ring: 160 70% 40%;
+  }
 }
 
 @layer base {
@@ -152,5 +269,23 @@
   
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-primary;
+  }
+
+  /* Theme transitions */
+  html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Additional theme-specific styling */
+  .purple .card-hover:hover {
+    @apply shadow-purple-200 dark:shadow-purple-900/30;
+  }
+
+  .blue .card-hover:hover {
+    @apply shadow-blue-200 dark:shadow-blue-900/30;
+  }
+
+  .green .card-hover:hover {
+    @apply shadow-green-200 dark:shadow-green-900/30;
   }
 }
