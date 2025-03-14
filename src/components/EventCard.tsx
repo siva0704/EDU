@@ -1,8 +1,10 @@
 
 import React from 'react';
-import { Calendar, Clock, MapPin, User, Download } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, Download, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import { useDownloadUtils } from '@/utils/downloadUtils';
+import { toast } from '@/components/ui/use-toast';
 
 export interface EventProps {
   id: string;
@@ -19,7 +21,35 @@ export interface EventProps {
 
 const EventCard: React.FC<{ event: EventProps }> = ({ event }) => {
   const { role } = useAuth();
+  const { downloadSingleResource } = useDownloadUtils();
   const canEdit = role === 'admin' || role === 'teacher';
+  
+  const handleDownload = () => {
+    downloadSingleResource({
+      id: event.id,
+      title: event.title,
+      type: 'event',
+      url: `/events/${event.id}`
+    });
+  };
+  
+  const handleEdit = () => {
+    toast({
+      title: "Edit Event",
+      description: `Editing: ${event.title}`,
+    });
+    // In a real app, this would open an edit form
+    console.log("Editing event:", event.id);
+  };
+  
+  const handleRegister = () => {
+    toast({
+      title: event.registrationRequired ? "Registration" : "RSVP",
+      description: `You've ${event.registrationRequired ? 'registered' : 'RSVP\'d'} for ${event.title}`,
+    });
+    // In a real app, this would submit a registration
+    console.log(`${event.registrationRequired ? 'Registering' : 'RSVP'} for event:`, event.id);
+  };
   
   return (
     <div className="card-hover rounded-xl overflow-hidden bg-white dark:bg-black/40 border shadow-sm">
@@ -76,20 +106,23 @@ const EventCard: React.FC<{ event: EventProps }> = ({ event }) => {
       <div className="p-4 border-t flex items-center justify-between">
         {canEdit ? (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-8">Edit</Button>
-            <Button variant="outline" size="sm" className="h-8">
+            <Button variant="outline" size="sm" className="h-8" onClick={handleEdit}>
+              <Edit className="h-4 w-4 mr-1" />
+              <span>Edit</span>
+            </Button>
+            <Button variant="outline" size="sm" className="h-8" onClick={handleDownload}>
               <Download className="h-4 w-4 mr-1" />
               <span>Download</span>
             </Button>
           </div>
         ) : (
-          <Button variant="outline" size="sm" className="h-8">
+          <Button variant="outline" size="sm" className="h-8" onClick={handleDownload}>
             <Download className="h-4 w-4 mr-1" />
             <span>Download</span>
           </Button>
         )}
         
-        <Button variant="default" size="sm" className="h-8">
+        <Button variant="default" size="sm" className="h-8" onClick={handleRegister}>
           {event.registrationRequired ? "Register" : "RSVP"}
         </Button>
       </div>

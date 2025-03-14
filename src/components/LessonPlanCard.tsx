@@ -1,8 +1,10 @@
 
 import React from 'react';
-import { Calendar, Clock, BookOpen, Download, FileText } from 'lucide-react';
+import { Calendar, Clock, BookOpen, Download, FileText, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import { useDownloadUtils } from '@/utils/downloadUtils';
+import { toast } from '@/components/ui/use-toast';
 
 export interface LessonPlanProps {
   id: string;
@@ -18,7 +20,26 @@ export interface LessonPlanProps {
 
 const LessonPlanCard: React.FC<{ plan: LessonPlanProps }> = ({ plan }) => {
   const { role } = useAuth();
+  const { downloadSingleResource } = useDownloadUtils();
   const canEdit = role === 'admin' || role === 'teacher';
+  
+  const handleDownload = () => {
+    downloadSingleResource({
+      id: plan.id,
+      title: plan.title,
+      type: 'lesson',
+      url: `/lessons/${plan.id}`
+    });
+  };
+  
+  const handleEdit = () => {
+    toast({
+      title: "Edit Lesson Plan",
+      description: `Editing: ${plan.title}`,
+    });
+    // In a real app, this would open an edit form
+    console.log("Editing lesson plan:", plan.id);
+  };
   
   return (
     <div className="card-hover rounded-xl overflow-hidden bg-white dark:bg-black/40 border shadow-sm">
@@ -75,14 +96,17 @@ const LessonPlanCard: React.FC<{ plan: LessonPlanProps }> = ({ plan }) => {
         
         {canEdit ? (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-8">Edit</Button>
-            <Button variant="outline" size="sm" className="h-8">
+            <Button variant="outline" size="sm" className="h-8" onClick={handleEdit}>
+              <Edit className="h-4 w-4 mr-1" />
+              <span>Edit</span>
+            </Button>
+            <Button variant="outline" size="sm" className="h-8" onClick={handleDownload}>
               <Download className="h-4 w-4 mr-1" />
               <span>Download</span>
             </Button>
           </div>
         ) : (
-          <Button variant="outline" size="sm" className="h-8">
+          <Button variant="outline" size="sm" className="h-8" onClick={handleDownload}>
             <Download className="h-4 w-4 mr-1" />
             <span>Download</span>
           </Button>

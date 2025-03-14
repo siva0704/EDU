@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Download, Filter, Plus, Search } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
+import { toast } from '@/components/ui/use-toast';
 
 // Sample data
 const sampleContacts: ContactProps[] = [
@@ -121,6 +122,15 @@ const Contacts = () => {
     downloadAllResources(resources, 'Department Contacts Directory');
   };
   
+  const handleAddContact = () => {
+    toast({
+      title: "Add Contact",
+      description: "Opening form to add a new contact.",
+    });
+    // In a real app, this would open a form to add a new contact
+    console.log("Opening add new contact form");
+  };
+  
   // Get unique departments
   const departments = ['All', ...Array.from(new Set(sampleContacts.map(contact => contact.department)))];
   
@@ -135,6 +145,24 @@ const Contacts = () => {
     
     return matchesSearch && matchesDepartment;
   });
+  
+  // Handle department change
+  const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const department = e.target.value;
+    setSelectedDepartment(department);
+    
+    if (department !== 'All') {
+      toast({
+        title: "Department Selected",
+        description: `Filtered contacts to ${department} department.`,
+      });
+    } else {
+      toast({
+        title: "All Departments",
+        description: "Showing contacts from all departments.",
+      });
+    }
+  };
   
   return (
     <div className="flex min-h-screen bg-background">
@@ -152,7 +180,7 @@ const Contacts = () => {
             
             <div className="flex items-center gap-2">
               {canAdd && (
-                <Button className="h-10">
+                <Button className="h-10" onClick={handleAddContact}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Contact
                 </Button>
@@ -180,7 +208,7 @@ const Contacts = () => {
             <select
               className="h-10 px-3 rounded-lg border bg-transparent focus:outline-none focus:ring-1 focus:ring-primary sm:w-auto w-full"
               value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
+              onChange={handleDepartmentChange}
             >
               {departments.map((dept) => (
                 <option key={dept} value={dept}>{dept}</option>

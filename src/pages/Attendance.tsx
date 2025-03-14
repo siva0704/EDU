@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Download, Plus } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
+import { toast } from '@/components/ui/use-toast';
 
 // Sample data
 const sampleAttendanceRecords: AttendanceRecord[] = [
@@ -137,6 +138,15 @@ const Attendance = () => {
     downloadAllResources(resources, 'All Attendance Records');
   };
   
+  const handleAddRecord = () => {
+    toast({
+      title: "Add Attendance Record",
+      description: "Opening form to add a new attendance record.",
+    });
+    // In a real app, this would open a form to add a new attendance record
+    console.log("Opening add new attendance record form");
+  };
+  
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
@@ -153,7 +163,7 @@ const Attendance = () => {
             
             <div className="flex items-center gap-2">
               {canAdd && (
-                <Button className="h-10">
+                <Button className="h-10" onClick={handleAddRecord}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Record
                 </Button>

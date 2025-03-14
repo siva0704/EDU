@@ -11,6 +11,7 @@ import {
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 
 const RoleSelector: React.FC = () => {
   const { role, login } = useAuth();
@@ -21,6 +22,10 @@ const RoleSelector: React.FC = () => {
     if (newRole) {
       login(newRole);
       setOpen(false);
+      toast({
+        title: "Role Changed",
+        description: `You're now viewing as ${newRole.charAt(0).toUpperCase() + newRole.slice(1)}`,
+      });
     }
   };
   
@@ -31,6 +36,9 @@ const RoleSelector: React.FC = () => {
           <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
             <User className="h-5 w-5 text-primary" />
           </div>
+          <span className="font-medium text-sm mr-1 hidden md:inline">
+            {role && role.charAt(0).toUpperCase() + role.slice(1)}
+          </span>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48 animate-scale-in">

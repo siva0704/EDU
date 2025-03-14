@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Download, Filter, Plus, Search } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
+import { toast } from '@/components/ui/use-toast';
 
 // Sample data
 const sampleLessonPlans: LessonPlanProps[] = [
@@ -144,6 +145,24 @@ const LessonPlans = () => {
     downloadAllResources(resources, 'All Lesson Plans');
   };
   
+  const handleCreateNew = () => {
+    toast({
+      title: "Create New Lesson Plan",
+      description: "Opening form to create a new lesson plan.",
+    });
+    // In a real app, this would open a form to create a new lesson plan
+    console.log("Opening create new lesson plan form");
+  };
+  
+  const handleFilter = () => {
+    toast({
+      title: "Filter Options",
+      description: "Opening filter options for lesson plans.",
+    });
+    // In a real app, this would open filter options
+    console.log("Opening filter options");
+  };
+  
   const filteredPlans = sampleLessonPlans.filter(
     plan => 
       plan.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -167,7 +186,7 @@ const LessonPlans = () => {
             
             <div className="flex items-center gap-2">
               {canAdd && (
-                <Button className="h-10">
+                <Button className="h-10" onClick={handleCreateNew}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create New
                 </Button>
@@ -192,7 +211,7 @@ const LessonPlans = () => {
               />
             </div>
             
-            <Button variant="outline" className="h-10 sm:w-auto w-full">
+            <Button variant="outline" className="h-10 sm:w-auto w-full" onClick={handleFilter}>
               <Filter className="h-4 w-4 mr-2" />
               Filter
             </Button>

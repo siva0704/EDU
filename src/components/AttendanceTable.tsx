@@ -1,9 +1,14 @@
 
 import React, { useState } from 'react';
-import { Calendar, Search, Download, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Search, Download, Filter, ChevronLeft, ChevronRight, Edit } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import { useDownloadUtils } from '@/utils/downloadUtils';
+import { toast } from '@/components/ui/use-toast';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { format } from 'date-fns';
 
 export interface AttendanceRecord {
   id: string;
@@ -21,9 +26,11 @@ interface AttendanceTableProps {
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({ records }) => {
   const { role } = useAuth();
+  const { downloadSingleResource } = useDownloadUtils();
   const canEdit = role === 'admin' || role === 'teacher';
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const recordsPerPage = 10;
   
   const filteredRecords = records.filter(record => 
@@ -51,6 +58,41 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records }) => {
     }
   };
   
+  const handleExport = () => {
+    downloadSingleResource({
+      id: 'attendance-export',
+      title: 'Attendance Records',
+      type: 'attendance',
+      url: '/attendance/export'
+    });
+  };
+  
+  const handleFilter = () => {
+    toast({
+      title: "Filter Applied",
+      description: "Attendance records filtered by selected criteria.",
+    });
+  };
+  
+  const handleEditRecord = (record: AttendanceRecord) => {
+    toast({
+      title: "Edit Attendance",
+      description: `Editing record for ${record.student}`,
+    });
+    // In a real app, this would open an edit form
+    console.log("Editing attendance record:", record.id);
+  };
+  
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    if (selectedDate) {
+      toast({
+        title: "Date Selected",
+        description: `Selected: ${format(selectedDate, 'PPP')}`,
+      });
+    }
+  };
+  
   return (
     <div className="bg-white dark:bg-black/40 rounded-xl border shadow-sm overflow-hidden">
       <div className="p-4 border-b flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
@@ -66,15 +108,29 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records }) => {
         </div>
         
         <div className="flex items-center gap-2 self-end">
-          <Button variant="outline" size="sm" className="h-10">
-            <Calendar className="h-4 w-4 mr-2" />
-            <span>Date Range</span>
-          </Button>
-          <Button variant="outline" size="sm" className="h-10">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-10">
+                <Calendar className="h-4 w-4 mr-2" />
+                <span>{date ? format(date, 'PP') : 'Date Range'}</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <CalendarComponent
+                mode="single"
+                selected={date}
+                onSelect={handleDateSelect}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+          
+          <Button variant="outline" size="sm" className="h-10" onClick={handleFilter}>
             <Filter className="h-4 w-4 mr-2" />
             <span>Filter</span>
           </Button>
-          <Button variant="outline" size="sm" className="h-10">
+          
+          <Button variant="outline" size="sm" className="h-10" onClick={handleExport}>
             <Download className="h-4 w-4 mr-2" />
             <span>Export</span>
           </Button>
@@ -110,7 +166,14 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records }) => {
                 {canEdit && (
                   <td className="p-3">
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">Edit</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleEditRecord(record)}
+                      >
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
                     </div>
                   </td>
                 )}
