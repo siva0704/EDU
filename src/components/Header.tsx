@@ -1,10 +1,17 @@
 
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/utils';
 import RoleSelector from './RoleSelector';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, LogOut, UserCircle } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const getPageTitle = (pathname: string): string => {
   const paths: Record<string, string> = {
@@ -22,8 +29,14 @@ const getPageTitle = (pathname: string): string => {
 
 const Header: React.FC = () => {
   const location = useLocation();
-  const { role } = useAuth();
+  const navigate = useNavigate();
+  const { role, user, logout } = useAuth();
   const pageTitle = getPageTitle(location.pathname);
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
   
   return (
     <header className="h-16 border-b border-border bg-background/50 backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between px-6">
@@ -61,6 +74,42 @@ const Header: React.FC = () => {
         </div>
         
         <RoleSelector />
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
+            <div className="h-9 w-9 rounded-full flex items-center justify-center">
+              {user?.avatar ? (
+                <img 
+                  src={user.avatar} 
+                  alt={user?.name || 'User'} 
+                  className="h-full w-full rounded-full object-cover"
+                />
+              ) : (
+                <UserCircle className="h-9 w-9 text-muted-foreground" />
+              )}
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <div className="px-2 py-1.5">
+              <div className="text-sm font-medium">{user?.name || 'User'}</div>
+              <div className="text-xs text-muted-foreground">{user?.email || ''}</div>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              className="cursor-pointer" 
+              onClick={() => navigate('/settings')}
+            >
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              className="cursor-pointer text-destructive focus:text-destructive" 
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
