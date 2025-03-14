@@ -1,8 +1,8 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import AttendanceTable, { AttendanceRecord } from '../components/AttendanceTable';
+import AddAttendanceModal from '../components/attendance/AddAttendanceModal';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Download, Plus } from 'lucide-react';
@@ -124,6 +124,8 @@ const sampleAttendanceRecords: AttendanceRecord[] = [
 const Attendance = () => {
   const { role } = useAuth();
   const { downloadAllResources } = useDownloadUtils();
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [records, setRecords] = useState(sampleAttendanceRecords);
   
   const canAdd = role === 'admin' || role === 'teacher';
   
@@ -139,12 +141,29 @@ const Attendance = () => {
   };
   
   const handleAddRecord = () => {
+    setAddModalOpen(true);
+  };
+  
+  const handleSaveNewRecord = (record: Omit<AttendanceRecord, 'id'>) => {
+    const newRecord = {
+      id: `${records.length + 1}`,
+      ...record
+    };
+    
+    setRecords(prev => [newRecord, ...prev]);
+    
     toast({
-      title: "Add Attendance Record",
-      description: "Opening form to add a new attendance record.",
+      title: "Record Added",
+      description: `Attendance record for ${record.student} has been added.`,
     });
-    // In a real app, this would open a form to add a new attendance record
-    console.log("Opening add new attendance record form");
+  };
+  
+  const handleEditRecord = (updatedRecord: AttendanceRecord) => {
+    setRecords(prev => 
+      prev.map(record => 
+        record.id === updatedRecord.id ? updatedRecord : record
+      )
+    );
   };
   
   return (
@@ -177,10 +196,16 @@ const Attendance = () => {
           </div>
           
           <div className="mb-6">
-            <AttendanceTable records={sampleAttendanceRecords} />
+            <AttendanceTable records={records} onEdit={handleEditRecord} />
           </div>
         </main>
       </div>
+      
+      <AddAttendanceModal
+        isOpen={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onSave={handleSaveNewRecord}
+      />
     </div>
   );
 };
