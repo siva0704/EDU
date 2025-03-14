@@ -1,10 +1,13 @@
+
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import AttendanceTable, { AttendanceRecord } from '../components/AttendanceTable';
 import AddAttendanceModal from '../components/attendance/AddAttendanceModal';
+import QuickAttendanceForm from '../components/attendance/QuickAttendanceForm';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Download, Plus } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
@@ -126,6 +129,7 @@ const Attendance = () => {
   const { downloadAllResources } = useDownloadUtils();
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [records, setRecords] = useState(sampleAttendanceRecords);
+  const [activeTab, setActiveTab] = useState("quick");
   
   const canAdd = role === 'admin' || role === 'teacher';
   
@@ -158,6 +162,15 @@ const Attendance = () => {
     });
   };
   
+  const handleSaveMultipleRecords = (newRecords: Omit<AttendanceRecord, 'id'>[]) => {
+    const recordsToAdd = newRecords.map((record, index) => ({
+      id: `${records.length + index + 1}`,
+      ...record
+    }));
+    
+    setRecords(prev => [...recordsToAdd, ...prev]);
+  };
+  
   const handleEditRecord = (updatedRecord: AttendanceRecord) => {
     setRecords(prev => 
       prev.map(record => 
@@ -181,7 +194,7 @@ const Attendance = () => {
             </div>
             
             <div className="flex items-center gap-2">
-              {canAdd && (
+              {canAdd && activeTab === "records" && (
                 <Button className="h-10" onClick={handleAddRecord}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Record
@@ -195,9 +208,28 @@ const Attendance = () => {
             </div>
           </div>
           
-          <div className="mb-6">
-            <AttendanceTable records={records} onEdit={handleEditRecord} />
-          </div>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="mb-4">
+              <TabsTrigger value="quick">Take Attendance</TabsTrigger>
+              <TabsTrigger value="records">Attendance Records</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="quick" className="space-y-4">
+              {canAdd ? (
+                <QuickAttendanceForm onSubmit={handleSaveMultipleRecords} />
+              ) : (
+                <div className="text-center p-10 border rounded-lg">
+                  <p>You don't have permission to take attendance.</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="records">
+              <div className="mb-6">
+                <AttendanceTable records={records} onEdit={handleEditRecord} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </main>
       </div>
       
