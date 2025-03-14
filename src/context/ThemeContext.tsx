@@ -1,16 +1,16 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark' | 'purple' | 'blue' | 'green';
+export type Theme = 'light' | 'dark' | 'purple' | 'blue' | 'green';
 
-type ThemeInfo = {
+export type ThemeInfo = {
   id: Theme;
   name: string;
   description: string;
   intent: 'neutral' | 'creative' | 'professional' | 'nature';
 };
 
-const themeData: Record<Theme, ThemeInfo> = {
+export const themeData: Record<Theme, ThemeInfo> = {
   'light': { 
     id: 'light', 
     name: 'Light Mode', 
