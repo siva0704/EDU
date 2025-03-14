@@ -16,63 +16,63 @@ import RecordingsFilter from '../components/recordings/RecordingsFilter';
 export const sampleVideos: VideoProps[] = [
   {
     id: '1',
-    title: 'Introduction to Algebra',
+    title: 'Introduction to the Human Musculoskeletal System',
     thumbnail: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7',
     duration: '8:15',
     date: 'Apr 15, 2023',
-    teacher: 'John Smith',
-    subject: 'Mathematics',
-    url: '/videos/algebra.mp4'
+    teacher: 'Dr. John Smith',
+    subject: 'Anatomy',
+    url: '/videos/anatomy-musculoskeletal.mp4'
   },
   {
     id: '2',
-    title: 'Chemistry Lab: Reactions',
+    title: 'Cardiovascular System Function & Regulation',
     thumbnail: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d',
     duration: '10:30',
     date: 'Apr 12, 2023',
-    teacher: 'Emily Johnson',
-    subject: 'Chemistry',
-    url: '/videos/chemistry.mp4'
+    teacher: 'Dr. Emily Johnson',
+    subject: 'Physiology',
+    url: '/videos/physiology-cardiovascular.mp4'
   },
   {
     id: '3',
-    title: 'American Literature Overview',
+    title: 'Pathogenesis of Cancer & Tumor Development',
     thumbnail: 'https://images.unsplash.com/photo-1519682577862-22b62b24e493',
     duration: '7:45',
     date: 'Apr 10, 2023',
-    teacher: 'Robert Williams',
-    subject: 'Literature',
-    url: '/videos/literature.mp4'
+    teacher: 'Dr. Robert Williams',
+    subject: 'Pathology',
+    url: '/videos/pathology-cancer.mp4'
   },
   {
     id: '4',
-    title: 'Cell Biology Fundamentals',
+    title: 'Bacterial Classification & Gram Staining',
     thumbnail: 'https://images.unsplash.com/photo-1592434134753-a70baf7979d5',
     duration: '9:20',
     date: 'Apr 8, 2023',
-    teacher: 'Sarah Davis',
-    subject: 'Biology',
-    url: '/videos/biology.mp4'
+    teacher: 'Dr. Sarah Davis',
+    subject: 'Microbiology',
+    url: '/videos/microbiology-bacteria.mp4'
   },
   {
     id: '5',
-    title: 'Introduction to Python',
+    title: 'Principles of Drug Metabolism & Pharmacokinetics',
     thumbnail: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
     duration: '6:50',
     date: 'Apr 5, 2023',
-    teacher: 'Michael Brown',
-    subject: 'Computer Science',
-    url: '/videos/python.mp4'
+    teacher: 'Dr. Michael Brown',
+    subject: 'Pharmacology',
+    url: '/videos/pharmacology-metabolism.mp4'
   },
   {
     id: '6',
-    title: 'World War II: Key Events',
+    title: 'Neuroanatomy: Brain Structures & Functions',
     thumbnail: 'https://images.unsplash.com/photo-1581079288675-14e11f4474bf',
     duration: '9:15',
     date: 'Apr 3, 2023',
-    teacher: 'Amanda Miller',
-    subject: 'History',
-    url: '/videos/history.mp4'
+    teacher: 'Dr. Amanda Miller',
+    subject: 'Anatomy',
+    url: '/videos/anatomy-brain.mp4'
   },
 ];
 

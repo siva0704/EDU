@@ -73,11 +73,11 @@ const CreateLessonPlan = () => {
                       <SelectValue placeholder="Select subject" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Mathematics">Mathematics</SelectItem>
-                      <SelectItem value="Science">Science</SelectItem>
-                      <SelectItem value="English">English</SelectItem>
-                      <SelectItem value="History">History</SelectItem>
-                      <SelectItem value="Computer Science">Computer Science</SelectItem>
+                      <SelectItem value="Anatomy">Anatomy</SelectItem>
+                      <SelectItem value="Physiology">Physiology</SelectItem>
+                      <SelectItem value="Pathology">Pathology</SelectItem>
+                      <SelectItem value="Microbiology">Microbiology</SelectItem>
+                      <SelectItem value="Pharmacology">Pharmacology</SelectItem>
                     </SelectContent>
                   </Select>
                 </label>

@@ -19,14 +19,22 @@ interface RecordingsFilterProps {
   onApplyFilter: (filterOptions: FilterOptions) => void;
 }
 
+// Medical subjects
+const MEDICAL_SUBJECTS = [
+  'Anatomy',
+  'Physiology',
+  'Pathology',
+  'Microbiology',
+  'Pharmacology'
+];
+
 const RecordingsFilter: React.FC<RecordingsFilterProps> = ({ 
   isOpen, 
   onClose, 
   videos, 
   onApplyFilter 
 }) => {
-  // Extract unique subjects and teachers from videos
-  const allSubjects = Array.from(new Set(videos.map(video => video.subject)));
+  // Extract unique teachers from videos
   const allTeachers = Array.from(new Set(videos.map(video => video.teacher)));
   
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
@@ -86,7 +94,7 @@ const RecordingsFilter: React.FC<RecordingsFilterProps> = ({
           <div className="space-y-4">
             <Label className="text-base">Subjects</Label>
             <div className="grid grid-cols-2 gap-2">
-              {allSubjects.map(subject => (
+              {MEDICAL_SUBJECTS.map(subject => (
                 <div key={subject} className="flex items-center space-x-2">
                   <Checkbox 
                     id={`subject-${subject}`} 

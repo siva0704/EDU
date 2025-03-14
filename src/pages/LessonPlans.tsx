@@ -8,121 +8,121 @@ import { Button } from '@/components/ui/button';
 import { Download, Filter, Plus, Search } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
-// Sample data
+// Sample data with medical subjects
 const sampleLessonPlans: LessonPlanProps[] = [
   {
     id: '1',
-    title: 'Linear Equations',
-    subject: 'Mathematics',
+    title: 'Musculoskeletal System Overview',
+    subject: 'Anatomy',
     grade: '9',
     date: 'Apr 15, 2023',
     duration: '60 mins',
     objectives: [
-      'Define and identify linear equations',
-      'Solve linear equations using algebraic methods',
-      'Apply linear equations to real-world problems'
+      'Identify major bones and muscles',
+      'Understand joint structure and function',
+      'Explain the relationship between bones and muscles'
     ],
     resources: [
-      'Textbook: Algebra Basics, pp. 45-52',
-      'Worksheet: Linear Equation Practice',
-      'Online Calculator Tool'
+      'Textbook: Human Anatomy, pp. 45-52',
+      'Skeleton Model',
+      'Digital Anatomy Software'
     ],
-    teacher: 'John Smith'
+    teacher: 'Dr. John Smith'
   },
   {
     id: '2',
-    title: 'Cell Structure and Function',
-    subject: 'Biology',
+    title: 'Cardiovascular Physiology',
+    subject: 'Physiology',
     grade: '10',
     date: 'Apr 16, 2023',
     duration: '45 mins',
     objectives: [
-      'Identify the main components of a cell',
-      'Explain the function of each cell component',
-      'Compare plant and animal cells'
+      'Describe cardiac cycle phases',
+      'Explain blood pressure regulation',
+      'Analyze factors affecting cardiac output'
     ],
     resources: [
-      'Textbook: Biology Today, Chapter 3',
-      'Cell Diagram Handout',
-      'Microscope Lab Equipment'
+      'Textbook: Human Physiology, Chapter 3',
+      'Heart Model',
+      'Blood Pressure Monitoring Equipment'
     ],
-    teacher: 'Sarah Davis'
+    teacher: 'Dr. Sarah Davis'
   },
   {
     id: '3',
-    title: 'Introduction to Python Programming',
-    subject: 'Computer Science',
+    title: 'Cellular Mechanisms of Disease',
+    subject: 'Pathology',
     grade: '11',
     date: 'Apr 17, 2023',
     duration: '90 mins',
     objectives: [
-      'Understand basic Python syntax',
-      'Write simple programs using variables and operators',
-      'Debug common programming errors'
+      'Understand cell injury mechanisms',
+      'Identify patterns of inflammation',
+      'Analyze tissue repair processes'
     ],
     resources: [
-      'Python IDE Installation Guide',
-      'Coding Exercise Handout',
-      'Online Python Documentation'
+      'Pathology Atlas',
+      'Microscope Slides Collection',
+      'Online Pathology Database'
     ],
-    teacher: 'Michael Brown'
+    teacher: 'Dr. Michael Brown'
   },
   {
     id: '4',
-    title: 'World War II: Causes and Impact',
-    subject: 'History',
+    title: 'Bacteriology Fundamentals',
+    subject: 'Microbiology',
     grade: '10',
     date: 'Apr 18, 2023',
     duration: '55 mins',
     objectives: [
-      'Analyze the major causes of World War II',
-      'Evaluate the global impact of the conflict',
-      'Identify key historical figures and their roles'
+      'Classify bacteria by morphology',
+      'Perform and interpret Gram staining',
+      'Identify common pathogenic bacteria'
     ],
     resources: [
-      'Textbook: Modern History, Chapter 7',
-      'Historical Maps Collection',
-      'Documentary Clip: "The Road to War"'
+      'Microbiology Manual',
+      'Microscope Equipment',
+      'Bacterial Culture Samples'
     ],
-    teacher: 'Amanda Miller'
+    teacher: 'Dr. Amanda Miller'
   },
   {
     id: '5',
-    title: 'Shakespeare\'s Macbeth: Themes and Analysis',
-    subject: 'Literature',
+    title: 'Principles of Drug Action',
+    subject: 'Pharmacology',
     grade: '12',
     date: 'Apr 19, 2023',
     duration: '75 mins',
     objectives: [
-      'Identify major themes in Macbeth',
-      'Analyze character development and motivations',
-      'Interpret key passages and their significance'
+      'Explain drug absorption and distribution',
+      'Analyze receptor-mediated drug effects',
+      'Calculate dosage and pharmacokinetics'
     ],
     resources: [
-      'Copy of Macbeth (Oxford Edition)',
-      'Character Relationship Diagram',
-      'Audio Recording of Key Scenes'
+      'Pharmacology Textbook',
+      'Drug Interaction Charts',
+      'Simulation Software'
     ],
-    teacher: 'Robert Williams'
+    teacher: 'Dr. Robert Williams'
   },
   {
     id: '6',
-    title: 'Chemical Reactions and Equations',
-    subject: 'Chemistry',
+    title: 'Nervous System Anatomy',
+    subject: 'Anatomy',
     grade: '11',
     date: 'Apr 20, 2023',
     duration: '60 mins',
     objectives: [
-      'Balance chemical equations',
-      'Identify types of chemical reactions',
-      'Predict products of common reactions'
+      'Identify major structures of the brain',
+      'Describe spinal cord organization',
+      'Trace major neural pathways'
     ],
     resources: [
-      'Textbook: Chemistry in Context, pp. 78-92',
-      'Periodic Table Handout',
-      'Lab Safety Guidelines'
+      'Brain Models',
+      'Neuroanatomy Atlas',
+      'Cross-section Diagrams'
     ],
-    teacher: 'Emily Johnson'
+    teacher: 'Dr. Emily Johnson'
   }
 ];
 
