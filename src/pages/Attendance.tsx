@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -8,11 +7,11 @@ import QuickAttendanceForm from '../components/attendance/QuickAttendanceForm';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Download, Plus } from 'lucide-react';
+import { Download, Plus, FileText, Clock, Calendar } from 'lucide-react';
 import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
-// Sample data
 const sampleAttendanceRecords: AttendanceRecord[] = [
   {
     id: '1',
@@ -125,6 +124,7 @@ const sampleAttendanceRecords: AttendanceRecord[] = [
 ];
 
 const Attendance = () => {
+  const navigate = useNavigate();
   const { role } = useAuth();
   const { downloadAllResources } = useDownloadUtils();
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -142,6 +142,11 @@ const Attendance = () => {
     }];
     
     downloadAllResources(resources, 'All Attendance Records');
+    
+    toast({
+      title: "Download Started",
+      description: "Your attendance records are being downloaded.",
+    });
   };
   
   const handleAddRecord = () => {
@@ -179,6 +184,18 @@ const Attendance = () => {
     );
   };
   
+  const navigateToReports = () => {
+    navigate('/attendance/reports');
+  };
+  
+  const navigateToHistory = () => {
+    navigate('/attendance/history');
+  };
+  
+  const navigateToSchedule = () => {
+    navigate('/attendance/schedule');
+  };
+  
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
@@ -193,7 +210,22 @@ const Attendance = () => {
               <p className="text-muted-foreground">View and manage attendance records</p>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="outline" onClick={navigateToReports}>
+                <FileText className="h-4 w-4 mr-2" />
+                Reports
+              </Button>
+              
+              <Button variant="outline" onClick={navigateToHistory}>
+                <Clock className="h-4 w-4 mr-2" />
+                History
+              </Button>
+              
+              <Button variant="outline" onClick={navigateToSchedule}>
+                <Calendar className="h-4 w-4 mr-2" />
+                Schedule
+              </Button>
+              
               {canAdd && activeTab === "records" && (
                 <Button className="h-10" onClick={handleAddRecord}>
                   <Plus className="h-4 w-4 mr-2" />

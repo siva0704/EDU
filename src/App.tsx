@@ -11,6 +11,9 @@ import NotFound from "./pages/NotFound";
 import Recordings from "./pages/Recordings";
 import RecordingDetail from "./pages/RecordingDetail";
 import Attendance from "./pages/Attendance";
+import AttendanceReports from "./pages/attendance/AttendanceReports";
+import AttendanceHistory from "./pages/attendance/AttendanceHistory";
+import AttendanceSchedule from "./pages/attendance/AttendanceSchedule";
 import LessonPlans from "./pages/LessonPlans";
 import Contacts from "./pages/Contacts";
 import Events from "./pages/Events";
@@ -40,6 +43,9 @@ const AppRoutes = () => {
       <Route path="/recordings" element={<Recordings />} />
       <Route path="/recordings/:id" element={<RecordingDetail />} />
       <Route path="/attendance" element={<Attendance />} />
+      <Route path="/attendance/reports" element={<AttendanceReports />} />
+      <Route path="/attendance/history" element={<AttendanceHistory />} />
+      <Route path="/attendance/schedule" element={<AttendanceSchedule />} />
       <Route path="/lesson-plans" element={<LessonPlans />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/events" element={<Events />} />
