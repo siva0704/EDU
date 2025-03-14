@@ -15,6 +15,9 @@ import AttendanceReports from "./pages/attendance/AttendanceReports";
 import AttendanceHistory from "./pages/attendance/AttendanceHistory";
 import AttendanceSchedule from "./pages/attendance/AttendanceSchedule";
 import LessonPlans from "./pages/LessonPlans";
+import CreateLessonPlan from "./pages/lesson-plans/CreateLessonPlan";
+import DownloadLessonPlans from "./pages/lesson-plans/DownloadLessonPlans";
+import FilterLessonPlans from "./pages/lesson-plans/FilterLessonPlans";
 import Contacts from "./pages/Contacts";
 import Events from "./pages/Events";
 import Settings from "./pages/Settings";
@@ -47,6 +50,9 @@ const AppRoutes = () => {
       <Route path="/attendance/history" element={<AttendanceHistory />} />
       <Route path="/attendance/schedule" element={<AttendanceSchedule />} />
       <Route path="/lesson-plans" element={<LessonPlans />} />
+      <Route path="/lesson-plans/create" element={<CreateLessonPlan />} />
+      <Route path="/lesson-plans/download" element={<DownloadLessonPlans />} />
+      <Route path="/lesson-plans/filter" element={<FilterLessonPlans />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/events" element={<Events />} />
       <Route 

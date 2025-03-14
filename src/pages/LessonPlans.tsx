@@ -1,12 +1,11 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import LessonPlanCard, { LessonPlanProps } from '../components/LessonPlanCard';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Download, Filter, Plus, Search } from 'lucide-react';
-import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
 
 // Sample data
@@ -128,39 +127,22 @@ const sampleLessonPlans: LessonPlanProps[] = [
 ];
 
 const LessonPlans = () => {
+  const navigate = useNavigate();
   const { role } = useAuth();
-  const { downloadAllResources } = useDownloadUtils();
   const [searchTerm, setSearchTerm] = useState('');
   
   const canAdd = role === 'admin' || role === 'teacher';
   
   const handleDownloadAll = () => {
-    const resources = sampleLessonPlans.map(plan => ({
-      id: plan.id,
-      title: plan.title,
-      type: 'lesson',
-      url: `/lessons/${plan.id}`
-    }));
-    
-    downloadAllResources(resources, 'All Lesson Plans');
+    navigate('/lesson-plans/download');
   };
   
   const handleCreateNew = () => {
-    toast({
-      title: "Create New Lesson Plan",
-      description: "Opening form to create a new lesson plan.",
-    });
-    // In a real app, this would open a form to create a new lesson plan
-    console.log("Opening create new lesson plan form");
+    navigate('/lesson-plans/create');
   };
   
   const handleFilter = () => {
-    toast({
-      title: "Filter Options",
-      description: "Opening filter options for lesson plans.",
-    });
-    // In a real app, this would open filter options
-    console.log("Opening filter options");
+    navigate('/lesson-plans/filter');
   };
   
   const filteredPlans = sampleLessonPlans.filter(
