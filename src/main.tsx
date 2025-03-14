@@ -1,19 +1,18 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import { ThemeProvider } from './context/ThemeContext';
 import { Toaster } from '@/components/ui/sonner';
+import ThemeControls from './components/ThemeControls';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <BrowserRouter>
-        <App />
-        <Toaster />
-      </BrowserRouter>
+      <App />
+      <Toaster />
+      <ThemeControls />
     </ThemeProvider>
   </React.StrictMode>
 );
