@@ -1,55 +1,62 @@
 
 import React from 'react';
-import { Moon, Sun, Palette } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
+import { Button } from '@/components/ui/button';
+import { Moon, Sun, Palette } from 'lucide-react';
 
+// This component is now deprecated in favor of the new ThemeControls
+// It's kept for backwards compatibility
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
   
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="rounded-full">
-          {theme === 'dark' ? (
-            <Moon className="h-5 w-5" />
-          ) : theme === 'light' ? (
-            <Sun className="h-5 w-5" />
-          ) : (
-            <Palette className="h-5 w-5" />
-          )}
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>
-          <Sun className="mr-2 h-4 w-4" />
-          <span>Light</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
-          <Moon className="mr-2 h-4 w-4" />
-          <span>Dark</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('purple')}>
-          <Palette className="mr-2 h-4 w-4 text-purple-500" />
-          <span>Purple</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('blue')}>
-          <Palette className="mr-2 h-4 w-4 text-blue-500" />
-          <span>Blue</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('green')}>
-          <Palette className="mr-2 h-4 w-4 text-green-500" />
-          <span>Green</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex space-x-2">
+      <Button 
+        variant={theme === 'light' ? 'default' : 'outline'} 
+        size="sm" 
+        onClick={() => setTheme('light')}
+        className="flex items-center gap-2"
+      >
+        <Sun className="h-4 w-4" />
+        <span>Light</span>
+      </Button>
+      <Button 
+        variant={theme === 'dark' ? 'default' : 'outline'} 
+        size="sm" 
+        onClick={() => setTheme('dark')}
+        className="flex items-center gap-2"
+      >
+        <Moon className="h-4 w-4" />
+        <span>Dark</span>
+      </Button>
+      <Button 
+        variant={theme === 'purple' ? 'default' : 'outline'} 
+        size="sm" 
+        onClick={() => setTheme('purple')}
+        className="flex items-center gap-2"
+      >
+        <div className="h-4 w-4 rounded-full bg-theme-purple" />
+        <span>Purple</span>
+      </Button>
+      <Button 
+        variant={theme === 'blue' ? 'default' : 'outline'} 
+        size="sm" 
+        onClick={() => setTheme('blue')}
+        className="flex items-center gap-2"
+      >
+        <div className="h-4 w-4 rounded-full bg-theme-blue" />
+        <span>Blue</span>
+      </Button>
+      <Button 
+        variant={theme === 'green' ? 'default' : 'outline'} 
+        size="sm" 
+        onClick={() => setTheme('green')}
+        className="flex items-center gap-2"
+      >
+        <div className="h-4 w-4 rounded-full bg-theme-green" />
+        <span>Green</span>
+      </Button>
+    </div>
   );
 };
 
