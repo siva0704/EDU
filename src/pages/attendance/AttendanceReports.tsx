@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
@@ -26,11 +25,11 @@ const statusData = [
 ];
 
 const classData = [
-  { name: 'Mathematics 101', present: 95, absent: 10, late: 15 },
-  { name: 'Science 102', present: 88, absent: 12, late: 20 },
-  { name: 'History 103', present: 80, absent: 15, late: 25 },
-  { name: 'English 104', present: 90, absent: 8, late: 22 },
-  { name: 'Computer Science 105', present: 85, absent: 10, late: 25 },
+  { name: 'Anatomy', present: 95, absent: 10, late: 15 },
+  { name: 'Physiology', present: 88, absent: 12, late: 20 },
+  { name: 'Pathology', present: 80, absent: 15, late: 25 },
+  { name: 'Microbiology', present: 90, absent: 8, late: 22 },
+  { name: 'Pharmacology', present: 85, absent: 10, late: 25 },
 ];
 
 const AttendanceReports = () => {
@@ -110,10 +109,11 @@ const AttendanceReports = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Classes</SelectItem>
-                      <SelectItem value="math">Mathematics 101</SelectItem>
-                      <SelectItem value="science">Science 102</SelectItem>
-                      <SelectItem value="history">History 103</SelectItem>
-                      <SelectItem value="english">English 104</SelectItem>
+                      <SelectItem value="anatomy">Anatomy</SelectItem>
+                      <SelectItem value="physiology">Physiology</SelectItem>
+                      <SelectItem value="pathology">Pathology</SelectItem>
+                      <SelectItem value="microbiology">Microbiology</SelectItem>
+                      <SelectItem value="pharmacology">Pharmacology</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -189,3 +189,4 @@ const AttendanceReports = () => {
 };
 
 export default AttendanceReports;
+

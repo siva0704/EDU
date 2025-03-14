@@ -149,11 +149,11 @@ const QuickAttendanceForm: React.FC<QuickAttendanceFormProps> = ({ onSubmit }) =
                 <SelectValue placeholder="Select a class" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Mathematics 101">Mathematics 101</SelectItem>
-                <SelectItem value="Science 102">Science 102</SelectItem>
-                <SelectItem value="History 103">History 103</SelectItem>
-                <SelectItem value="English 104">English 104</SelectItem>
-                <SelectItem value="Computer Science 105">Computer Science 105</SelectItem>
+                <SelectItem value="Anatomy">Anatomy</SelectItem>
+                <SelectItem value="Physiology">Physiology</SelectItem>
+                <SelectItem value="Pathology">Pathology</SelectItem>
+                <SelectItem value="Microbiology">Microbiology</SelectItem>
+                <SelectItem value="Pharmacology">Pharmacology</SelectItem>
               </SelectContent>
             </Select>
           </div>
