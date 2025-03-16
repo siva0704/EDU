@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -13,6 +12,7 @@ import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import ThemeControls from '@/components/ThemeControls';
+import StudentAttendanceView from '@/components/student/StudentAttendanceView';
 
 const sampleAttendanceRecords: AttendanceRecord[] = [
   {
@@ -127,13 +127,14 @@ const sampleAttendanceRecords: AttendanceRecord[] = [
 
 const Attendance = () => {
   const navigate = useNavigate();
-  const { role } = useAuth();
+  const { role, user } = useAuth();
   const { downloadAllResources } = useDownloadUtils();
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [records, setRecords] = useState(sampleAttendanceRecords);
   const [activeTab, setActiveTab] = useState("quick");
   
   const canAdd = role === 'admin' || role === 'teacher';
+  const isStudent = role === 'student';
   
   const handleDownloadAll = () => {
     const resources = [{
@@ -197,6 +198,31 @@ const Attendance = () => {
   const navigateToSchedule = () => {
     navigate('/attendance/schedule');
   };
+  
+  if (isStudent) {
+    return (
+      <div className="flex min-h-screen bg-background">
+        <Sidebar />
+        
+        <div className="flex-1">
+          <Header />
+          
+          <main className="p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+              <div>
+                <h2 className="text-2xl font-bold">My Attendance</h2>
+                <p className="text-muted-foreground">View your attendance records</p>
+              </div>
+            </div>
+            
+            <StudentAttendanceView />
+          </main>
+        </div>
+        
+        <ThemeControls />
+      </div>
+    );
+  }
   
   return (
     <div className="flex min-h-screen bg-background">
