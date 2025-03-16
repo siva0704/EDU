@@ -22,6 +22,8 @@ import FilterLessonPlans from "./pages/lesson-plans/FilterLessonPlans";
 import Contacts from "./pages/Contacts";
 import Events from "./pages/Events";
 import Settings from "./pages/Settings";
+import TeacherSettings from "./pages/TeacherSettings";
+import StudentSettings from "./pages/StudentSettings";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +43,9 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode,
 };
 
 const AppRoutes = () => {
+  const { role } = useAuth();
+  
   return (
-    <BrowserRouter basename="/edu-hub-connector-21">
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/recordings" element={<Recordings />} />
@@ -60,14 +63,15 @@ const AppRoutes = () => {
       <Route 
         path="/settings" 
         element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <Settings />
+          <ProtectedRoute allowedRoles={['admin', 'teacher', 'student']}>
+            {role === 'admin' && <Settings />}
+            {role === 'teacher' && <TeacherSettings />}
+            {role === 'student' && <StudentSettings />}
           </ProtectedRoute>
         } 
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
-    </BrowserRouter>
   );
 };
 
@@ -75,11 +79,11 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/edu-hub-connector-21">
           <AppRoutes />
+          <Toaster />
+          <Sonner />
         </BrowserRouter>
-        <Toaster />
-        <Sonner />
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
