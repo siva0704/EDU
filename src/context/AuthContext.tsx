@@ -13,6 +13,7 @@ interface User {
   lastLogin?: string;
   department?: string;
   position?: string;
+  registrationNumber?: string; // Added for students
 }
 
 interface AuthContextType {
@@ -62,7 +63,8 @@ const getUserData = (role: UserRole): User | null => {
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student',
       lastLogin: currentDate,
       department: 'Computer Science',
-      position: 'Undergraduate Student'
+      position: 'Undergraduate Student',
+      registrationNumber: 'STU2023001' // Added registration number
     }
   };
   
