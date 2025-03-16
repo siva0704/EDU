@@ -42,6 +42,7 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode,
 
 const AppRoutes = () => {
   return (
+    <BrowserRouter basename="/edu-hub-connector-21">
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/recordings" element={<Recordings />} />
@@ -66,6 +67,7 @@ const AppRoutes = () => {
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </BrowserRouter>
   );
 };
 
