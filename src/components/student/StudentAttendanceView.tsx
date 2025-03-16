@@ -85,7 +85,7 @@ const StudentAttendanceView: React.FC = () => {
   const { user } = useAuth();
   const { downloadSingleResource } = useDownloadUtils();
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedClass, setSelectedClass] = useState('all-classes');
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
   
@@ -96,7 +96,7 @@ const StudentAttendanceView: React.FC = () => {
   
   // Apply additional filters
   const filteredRecords = studentRecords.filter(record => {
-    const matchesClass = selectedClass === '' || record.class === selectedClass;
+    const matchesClass = selectedClass === 'all-classes' || record.class === selectedClass;
     const matchesDate = !date || record.date === format(date, 'MMM d, yyyy');
     return matchesClass && matchesDate;
   });
@@ -231,7 +231,7 @@ const StudentAttendanceView: React.FC = () => {
               <SelectValue placeholder="All Classes" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Classes</SelectItem>
+              <SelectItem value="all-classes">All Classes</SelectItem>
               {uniqueClasses.map(className => (
                 <SelectItem key={className} value={className}>{className}</SelectItem>
               ))}
