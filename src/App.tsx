@@ -4,8 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
-import { BrowserRouter } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -42,51 +41,43 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode,
   return <>{children}</>;
 };
 
-const AppRoutes = () => {
+const App = () => {
   const { role } = useAuth();
   
   return (
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/recordings" element={<Recordings />} />
-      <Route path="/recordings/:id" element={<RecordingDetail />} />
-      <Route path="/attendance" element={<Attendance />} />
-      <Route path="/attendance/reports" element={<AttendanceReports />} />
-      <Route path="/attendance/history" element={<AttendanceHistory />} />
-      <Route path="/attendance/schedule" element={<AttendanceSchedule />} />
-      <Route path="/lesson-plans" element={<LessonPlans />} />
-      <Route path="/lesson-plans/create" element={<CreateLessonPlan />} />
-      <Route path="/lesson-plans/download" element={<DownloadLessonPlans />} />
-      <Route path="/lesson-plans/filter" element={<FilterLessonPlans />} />
-      <Route path="/contacts" element={<Contacts />} />
-      <Route path="/events" element={<Events />} />
-      <Route 
-        path="/settings" 
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'teacher', 'student']}>
-            {role === 'admin' && <Settings />}
-            {role === 'teacher' && <TeacherSettings />}
-            {role === 'student' && <StudentSettings />}
-          </ProtectedRoute>
-        } 
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/recordings" element={<Recordings />} />
+          <Route path="/recordings/:id" element={<RecordingDetail />} />
+          <Route path="/attendance" element={<Attendance />} />
+          <Route path="/attendance/reports" element={<AttendanceReports />} />
+          <Route path="/attendance/history" element={<AttendanceHistory />} />
+          <Route path="/attendance/schedule" element={<AttendanceSchedule />} />
+          <Route path="/lesson-plans" element={<LessonPlans />} />
+          <Route path="/lesson-plans/create" element={<CreateLessonPlan />} />
+          <Route path="/lesson-plans/download" element={<DownloadLessonPlans />} />
+          <Route path="/lesson-plans/filter" element={<FilterLessonPlans />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/events" element={<Events />} />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'teacher', 'student']}>
+                {role === 'admin' && <Settings />}
+                {role === 'teacher' && <TeacherSettings />}
+                {role === 'student' && <StudentSettings />}
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Toaster />
+        <Sonner />
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <BrowserRouter basename="/edu-hub-connector-21">
-          <AppRoutes />
-          <Toaster />
-          <Sonner />
-        </BrowserRouter>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
 
 export default App;
