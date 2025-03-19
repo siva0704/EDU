@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { AlertTriangle, Lock, Mail, Loader2 } from 'lucide-react';
+import LoadingLogo from '@/components/LoadingLogo';
 import {
   Dialog,
   DialogContent,
@@ -36,11 +37,16 @@ const Index = () => {
   const [selectedRole, setSelectedRole] = useState<'admin' | 'teacher' | 'student' | null>(null);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   
   useEffect(() => {
     if (isAuthenticated && role) {
-      // If already authenticated, redirect to recordings page
-      navigate('/recordings');
+      // Show loading screen for 2 seconds after authentication
+      setShowLoadingScreen(true);
+      // After loading is complete, redirect to recordings page
+      setTimeout(() => {
+        navigate('/recordings');
+      }, 2000);
     }
   }, [isAuthenticated, role, navigate]);
   
@@ -87,7 +93,7 @@ const Index = () => {
       if (loginEmail.includes(selectedRole)) {
         login(selectedRole);
         setIsLoginDialogOpen(false);
-        navigate('/recordings');
+        // Loading screen will handle navigation
       } else {
         setLoginError(`Please use ${expectedEmails[selectedRole]} for ${selectedRole} login.`);
       }
@@ -99,7 +105,7 @@ const Index = () => {
     if (!selectedRole) return;
     setIsConfirmDialogOpen(false);
     login(selectedRole);
-    navigate('/recordings');
+    // Loading screen will handle navigation
   };
   
   const handleRoleSelect = (role: 'admin' | 'teacher' | 'student') => {
@@ -129,6 +135,10 @@ const Index = () => {
         <span className="ml-2 text-lg">Loading...</span>
       </div>
     );
+  }
+
+  if (showLoadingScreen) {
+    return <LoadingLogo />;
   }
   
   return (
