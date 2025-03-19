@@ -89,21 +89,11 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
             >
               {/* The actual logo */}
               <div className="h-24 w-24 relative">
-                {/* Using a fallback SVG instead of the missing image */}
-                <svg 
-                  viewBox="0 0 100 100"
-                  className="h-full w-full object-contain text-primary"
-                >
-                  <circle cx="50" cy="50" r="40" fill="currentColor" fillOpacity="0.2" />
-                  <path 
-                    d="M30 50 L45 65 L70 35" 
-                    stroke="currentColor" 
-                    strokeWidth="6" 
-                    fill="none" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                  />
-                </svg>
+                <img 
+                  src="/lovable-uploads/72700888-906e-492c-b8f1-e7d0a7c5b8b5.png" 
+                  alt="CASCADE Logo" 
+                  className="h-full w-full object-contain" 
+                />
                 
                 {/* Animated overlay effect */}
                 <motion.div 
