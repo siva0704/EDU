@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
-  base: '/edu-hub-connector-21/', // From your GitHub Pages setup
+  base: '/EDU/', // From your GitHub Pages setup
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'), // Maps @ to src folder

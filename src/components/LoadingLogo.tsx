@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-
+import logo from '../components/assets/logo.png'
 interface LoadingLogoProps {
   duration?: number;
   onComplete?: () => void;
@@ -90,7 +90,7 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
               {/* The actual logo */}
               <div className="h-24 w-24 relative">
                 <img 
-                  src="/lovable-uploads/72700888-906e-492c-b8f1-e7d0a7c5b8b5.png" 
+                  src={logo} 
                   alt="CASCADE Logo" 
                   className="h-full w-full object-contain" 
                 />
