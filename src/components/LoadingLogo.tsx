@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
 
 interface LoadingLogoProps {
   duration?: number;
@@ -20,80 +19,107 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
     return () => clearTimeout(timer);
   }, [duration, onComplete]);
 
-  // Logo circle variants for staggered animation
-  const circleVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: (i: number) => ({
-      scale: 1,
-      opacity: 1,
+  // Animation variants
+  const containerVariants = {
+    animate: {
+      rotate: [0, 0, 0],
+      scale: [0.9, 1, 0.9],
       transition: {
-        delay: i * 0.1,
-        duration: 0.5,
-        ease: "easeOut",
+        duration: 2,
         repeat: Infinity,
-        repeatType: "reverse" as const,
-        repeatDelay: 0.5
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  const pulseRingVariants = {
+    animate: {
+      scale: [0.85, 1.15],
+      opacity: [0.2, 0],
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Loading dots
+  const dotVariants = {
+    animate: (i: number) => ({
+      opacity: [0.3, 1, 0.3],
+      transition: {
+        duration: 1.2,
+        repeat: Infinity,
+        delay: i * 0.2,
+        ease: "easeInOut"
       }
     })
   };
-
-  // Array for the circles in the logo
-  const circles = Array.from({ length: 3 });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
       <div className="text-center">
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ 
-            duration: 0.6,
-            ease: "easeOut" 
-          }}
-          className="mb-6"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6 relative"
         >
-          <div className="relative inline-block">
-            {/* Modern Circle Logo Animation */}
-            <div className="relative p-4">
-              <motion.div
-                animate={{ 
-                  rotate: 360,
-                }}
-                transition={{ 
-                  duration: 3,
-                  ease: "linear",
-                  repeat: Infinity
-                }}
-                className="absolute inset-0 rounded-full border-t-4 border-l-4 border-primary/30 w-full h-full"
-              />
-              
-              <div className="flex justify-center items-center h-20 w-20">
-                {circles.map((_, i) => (
-                  <motion.div
-                    key={i}
-                    custom={i}
-                    variants={circleVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className={`absolute rounded-full bg-primary ${
-                      i === 0 ? 'h-4 w-4' : i === 1 ? 'h-6 w-6 opacity-60' : 'h-8 w-8 opacity-30'
-                    }`}
-                  />
-                ))}
-                <motion.div
+          {/* Pulse rings around logo */}
+          <motion.div
+            variants={pulseRingVariants}
+            animate="animate"
+            className="absolute inset-0 rounded-full border-2 border-primary/20"
+          />
+          
+          <motion.div
+            variants={pulseRingVariants}
+            animate="animate"
+            transition={{ delay: 0.5 }}
+            className="absolute inset-0 rounded-full border-2 border-primary/15"
+          />
+          
+          {/* Rotating container for the logo */}
+          <div className="relative">
+            <motion.div
+              className="p-5 relative"
+              variants={containerVariants}
+              animate="animate"
+            >
+              {/* The actual logo */}
+              <div className="h-24 w-24 relative">
+                <img 
+                  src="/lovable-uploads/1fc6a3da-f954-4795-8456-d482ef000328.png" 
+                  alt="Cascade Logo" 
+                  className="h-full w-full object-contain" 
+                />
+                
+                {/* Animated overlay effect */}
+                <motion.div 
+                  className="absolute inset-0 bg-primary/10 rounded-full" 
                   animate={{ 
-                    scale: [1, 1.1, 1],
+                    opacity: [0, 0.2, 0],
                   }}
                   transition={{ 
-                    duration: 2,
-                    ease: "easeInOut",
+                    duration: 2, 
                     repeat: Infinity,
+                    ease: "easeInOut" 
                   }}
-                >
-                  <Loader2 className="h-12 w-12 text-primary animate-spin" />
-                </motion.div>
+                />
               </div>
-            </div>
+            </motion.div>
+            
+            {/* Circular progress track */}
+            <motion.div
+              className="absolute inset-0 rounded-full border-t-2 border-r-2 border-primary/30"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 3,
+                ease: "linear",
+                repeat: Infinity
+              }}
+            />
           </div>
         </motion.div>
         
@@ -103,7 +129,7 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
           transition={{ delay: 0.3, duration: 0.5 }}
           className="text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80"
         >
-          EDU Hub Connector
+          CASCADE
         </motion.h1>
         
         <motion.div
@@ -115,19 +141,14 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
             Loading your educational experience...
           </p>
           
-          {/* Loading progress dots */}
+          {/* Animated loading dots */}
           <div className="flex justify-center space-x-2 mt-2">
             {[0, 1, 2].map((i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: 1 }}
-                transition={{
-                  duration: 0.6,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  delay: i * 0.2,
-                }}
+                custom={i}
+                variants={dotVariants}
+                animate="animate"
                 className="h-2 w-2 rounded-full bg-primary"
               />
             ))}
