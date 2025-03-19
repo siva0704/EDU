@@ -43,10 +43,13 @@ const Index = () => {
     if (isAuthenticated && role) {
       // Show loading screen for 2 seconds after authentication
       setShowLoadingScreen(true);
+      
       // After loading is complete, redirect to recordings page
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         navigate('/recordings');
       }, 2000);
+      
+      return () => clearTimeout(timer);
     }
   }, [isAuthenticated, role, navigate]);
   
