@@ -40,6 +40,9 @@ const Index = () => {
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   
   useEffect(() => {
+    // For debugging
+    console.log("Auth state:", { isAuthenticated, role, isLoading, showLoadingScreen });
+    
     if (isAuthenticated && role) {
       // Show loading screen for 2 seconds after authentication
       setShowLoadingScreen(true);
@@ -141,6 +144,7 @@ const Index = () => {
   }
 
   if (showLoadingScreen) {
+    console.log("Showing loading screen");
     return <LoadingLogo />;
   }
   
