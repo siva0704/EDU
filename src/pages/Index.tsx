@@ -134,7 +134,9 @@ const Index = () => {
     show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
   };
   
+  // Show global loading state while authentication is being checked
   if (isLoading) {
+    console.log("App is in initial loading state");
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -143,8 +145,9 @@ const Index = () => {
     );
   }
 
+  // Show loading logo after successful authentication
   if (showLoadingScreen) {
-    console.log("Showing loading screen");
+    console.log("Showing loading screen with logo");
     return <LoadingLogo />;
   }
   
