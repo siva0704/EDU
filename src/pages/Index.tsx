@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -39,15 +40,17 @@ const Index = () => {
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   
   useEffect(() => {
-    // For debugging
+    // Add console logs for debugging
     console.log("Auth state:", { isAuthenticated, role, isLoading, showLoadingScreen });
     
     if (isAuthenticated && role) {
       // Show loading screen for 2 seconds after authentication
       setShowLoadingScreen(true);
+      console.log("Setting showLoadingScreen to true");
       
       // After loading is complete, redirect to recordings page
       const timer = setTimeout(() => {
+        console.log("Loading complete, navigating to recordings");
         navigate('/recordings');
       }, 2000);
       
@@ -147,7 +150,7 @@ const Index = () => {
   // Show loading logo after successful authentication
   if (showLoadingScreen) {
     console.log("Showing loading screen with logo");
-    return <LoadingLogo />;
+    return <LoadingLogo onComplete={() => navigate('/recordings')} />;
   }
   
   return (

@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import logo from './assets/logo.png';
 
 interface LoadingLogoProps {
   duration?: number;
@@ -90,11 +89,21 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
             >
               {/* The actual logo */}
               <div className="h-24 w-24 relative">
-                <img 
-                  src={logo} 
-                  alt="Cascade Logo" 
-                  className="h-full w-full object-contain" 
-                />
+                {/* Using a fallback SVG instead of the missing image */}
+                <svg 
+                  viewBox="0 0 100 100"
+                  className="h-full w-full object-contain text-primary"
+                >
+                  <circle cx="50" cy="50" r="40" fill="currentColor" fillOpacity="0.2" />
+                  <path 
+                    d="M30 50 L45 65 L70 35" 
+                    stroke="currentColor" 
+                    strokeWidth="6" 
+                    fill="none" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                  />
+                </svg>
                 
                 {/* Animated overlay effect */}
                 <motion.div 
