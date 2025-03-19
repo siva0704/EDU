@@ -66,18 +66,18 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
           transition={{ duration: 0.5 }}
           className="mb-6 relative"
         >
-          {/* Pulse rings around logo */}
+          {/* Pulse rings around logo - enhanced for dark mode */}
           <motion.div
             variants={pulseRingVariants}
             animate="animate"
-            className="absolute inset-0 rounded-full border-2 border-primary/20"
+            className="absolute inset-0 rounded-full border-2 border-primary/30 dark:border-primary/40"
           />
           
           <motion.div
             variants={pulseRingVariants}
             animate="animate"
             transition={{ delay: 0.5 }}
-            className="absolute inset-0 rounded-full border-2 border-primary/15"
+            className="absolute inset-0 rounded-full border-2 border-primary/20 dark:border-primary/30"
           />
           
           {/* Rotating container for the logo */}
@@ -95,11 +95,11 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
                   className="h-full w-full object-contain" 
                 />
                 
-                {/* Animated overlay effect */}
+                {/* Animated overlay effect - enhanced for dark mode */}
                 <motion.div 
-                  className="absolute inset-0 bg-primary/10 rounded-full" 
+                  className="absolute inset-0 bg-primary/10 dark:bg-primary/15 rounded-full" 
                   animate={{ 
-                    opacity: [0, 0.2, 0],
+                    opacity: [0, 0.3, 0],
                   }}
                   transition={{ 
                     duration: 2, 
@@ -110,9 +110,9 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
               </div>
             </motion.div>
             
-            {/* Circular progress track */}
+            {/* Circular progress track - enhanced for dark mode */}
             <motion.div
-              className="absolute inset-0 rounded-full border-t-2 border-r-2 border-primary/30"
+              className="absolute inset-0 rounded-full border-t-2 border-r-2 border-primary/40 dark:border-primary/50"
               animate={{ rotate: 360 }}
               transition={{
                 duration: 3,
@@ -129,7 +129,7 @@ const LoadingLogo: React.FC<LoadingLogoProps> = ({
           transition={{ delay: 0.3, duration: 0.5 }}
           className="text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80"
         >
-          CASCADE
+          CASCADE HUB
         </motion.h1>
         
         <motion.div

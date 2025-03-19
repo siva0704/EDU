@@ -87,8 +87,8 @@ const Sidebar: React.FC = () => {
       <div className="flex items-center justify-between h-16 px-3 border-b border-sidebar-border">
         {!isCollapsed && (
           <div className="font-semibold text-lg flex items-center gap-2">
-            <span className="text-primary font-bold">EDU</span>
-            <span>Hub Connector</span>
+            <span className="text-primary font-bold">CASCADE</span>
+            <span>HUB</span>
           </div>
         )}
         <button 

@@ -163,7 +163,7 @@ const Index = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="bg-primary/10 text-primary font-semibold py-1 px-3 rounded-full text-sm inline-block mb-6">
-            Welcome to EDU Hub Connector
+            Welcome to CASCADE HUB
           </div>
           <h1 className="text-4xl sm:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
             Connecting Educational Resources
@@ -184,7 +184,7 @@ const Index = () => {
             <div className="relative w-full h-full p-6 flex items-center">
               <img
                 src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-                alt="EDU Hub"
+                alt="CASCADE HUB"
                 className="absolute inset-0 w-full h-full object-cover opacity-10"
               />
               <div className="z-10 text-foreground max-w-xl">
