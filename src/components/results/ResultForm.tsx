@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useResults } from '@/context/ResultsContext';
 import { useAuth } from '@/context/AuthContext';
@@ -180,6 +181,7 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
               <SelectValue placeholder="Select a semester" />
             </SelectTrigger>
             <SelectContent>
+              {/* Make sure no empty values in SelectItem */}
               {semesters.map(sem => (
                 <SelectItem key={sem} value={sem}>{sem}</SelectItem>
               ))}

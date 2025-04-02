@@ -1,63 +1,57 @@
 
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
-import { VideoProps } from '../VideoCard';
+import { Label } from '@/components/ui/label';
+import { VideoProps } from '@/components/VideoCard';
+import { Separator } from '@/components/ui/separator';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-interface FilterOptions {
-  subjects: string[];
-  teachers: string[];
-  dateRange: 'all' | 'today' | 'week' | 'month';
-}
-
-interface RecordingsFilterProps {
+type RecordingsFilterProps = {
   isOpen: boolean;
   onClose: () => void;
   videos: VideoProps[];
-  onApplyFilter: (filterOptions: FilterOptions) => void;
-}
+  onApplyFilter: (filterOptions: {
+    subjects: string[];
+    teachers: string[];
+    dateRange: 'all' | 'today' | 'week' | 'month';
+  }) => void;
+};
 
-// Medical subjects
-const MEDICAL_SUBJECTS = [
-  'Anatomy',
-  'Physiology',
-  'Pathology',
-  'Microbiology',
-  'Pharmacology'
-];
-
-const RecordingsFilter: React.FC<RecordingsFilterProps> = ({ 
-  isOpen, 
-  onClose, 
-  videos, 
-  onApplyFilter 
+const RecordingsFilter: React.FC<RecordingsFilterProps> = ({
+  isOpen,
+  onClose,
+  videos,
+  onApplyFilter,
 }) => {
-  // Extract unique teachers from videos
-  const allTeachers = Array.from(new Set(videos.map(video => video.teacher)));
+  // Extract unique subjects and teachers
+  const subjects = [...new Set(videos.map(video => video.subject))];
+  const teachers = [...new Set(videos.map(video => video.teacher))];
   
+  // Initialize state with empty arrays
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedTeachers, setSelectedTeachers] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<'all' | 'today' | 'week' | 'month'>('all');
   
-  const handleSubjectChange = (subject: string) => {
-    setSelectedSubjects(prev => 
-      prev.includes(subject) 
-        ? prev.filter(s => s !== subject) 
-        : [...prev, subject]
-    );
+  const handleSubjectChange = (subject: string, checked: boolean) => {
+    if (checked) {
+      setSelectedSubjects(prev => [...prev, subject]);
+    } else {
+      setSelectedSubjects(prev => prev.filter(s => s !== subject));
+    }
   };
   
-  const handleTeacherChange = (teacher: string) => {
-    setSelectedTeachers(prev => 
-      prev.includes(teacher) 
-        ? prev.filter(t => t !== teacher) 
-        : [...prev, teacher]
-    );
+  const handleTeacherChange = (teacher: string, checked: boolean) => {
+    if (checked) {
+      setSelectedTeachers(prev => [...prev, teacher]);
+    } else {
+      setSelectedTeachers(prev => prev.filter(t => t !== teacher));
+    }
   };
   
-  const handleApplyFilter = () => {
+  const handleApply = () => {
     onApplyFilter({
       subjects: selectedSubjects,
       teachers: selectedTeachers,
@@ -66,107 +60,105 @@ const RecordingsFilter: React.FC<RecordingsFilterProps> = ({
     onClose();
   };
   
-  const handleResetFilter = () => {
+  const handleReset = () => {
     setSelectedSubjects([]);
     setSelectedTeachers([]);
     setDateRange('all');
-    
-    onApplyFilter({
-      subjects: [],
-      teachers: [],
-      dateRange: 'all'
-    });
-    onClose();
   };
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Filter Recordings</DialogTitle>
-          <DialogDescription>
-            Filter recordings by subject, teacher, or date.
-          </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-6 py-4">
-          {/* Subject filters */}
-          <div className="space-y-4">
-            <Label className="text-base">Subjects</Label>
-            <div className="grid grid-cols-2 gap-2">
-              {MEDICAL_SUBJECTS.map(subject => (
-                <div key={subject} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={`subject-${subject}`} 
-                    checked={selectedSubjects.includes(subject)}
-                    onCheckedChange={() => handleSubjectChange(subject)}
-                  />
-                  <label 
-                    htmlFor={`subject-${subject}`}
-                    className="text-sm cursor-pointer"
-                  >
-                    {subject}
-                  </label>
-                </div>
-              ))}
-            </div>
+        <div className="space-y-6">
+          {/* Subjects filter */}
+          <div className="space-y-3">
+            <Label className="font-medium">Subjects</Label>
+            <ScrollArea className="h-[120px] rounded-md border p-2">
+              <div className="space-y-2">
+                {subjects.map(subject => (
+                  <div className="flex items-center space-x-2" key={subject}>
+                    <Checkbox 
+                      id={`subject-${subject}`}
+                      checked={selectedSubjects.includes(subject)}
+                      onCheckedChange={(checked) => 
+                        handleSubjectChange(subject, checked as boolean)
+                      }
+                    />
+                    <Label 
+                      htmlFor={`subject-${subject}`}
+                      className="text-sm font-normal"
+                    >
+                      {subject}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
           
-          {/* Teacher filters */}
-          <div className="space-y-4">
-            <Label className="text-base">Teachers</Label>
-            <div className="grid grid-cols-2 gap-2">
-              {allTeachers.map(teacher => (
-                <div key={teacher} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={`teacher-${teacher}`} 
-                    checked={selectedTeachers.includes(teacher)}
-                    onCheckedChange={() => handleTeacherChange(teacher)}
-                  />
-                  <label 
-                    htmlFor={`teacher-${teacher}`}
-                    className="text-sm cursor-pointer"
-                  >
-                    {teacher}
-                  </label>
-                </div>
-              ))}
-            </div>
+          <Separator />
+          
+          {/* Teachers filter */}
+          <div className="space-y-3">
+            <Label className="font-medium">Teachers</Label>
+            <ScrollArea className="h-[120px] rounded-md border p-2">
+              <div className="space-y-2">
+                {teachers.map(teacher => (
+                  <div className="flex items-center space-x-2" key={teacher}>
+                    <Checkbox 
+                      id={`teacher-${teacher}`}
+                      checked={selectedTeachers.includes(teacher)}
+                      onCheckedChange={(checked) => 
+                        handleTeacherChange(teacher, checked as boolean)
+                      }
+                    />
+                    <Label 
+                      htmlFor={`teacher-${teacher}`}
+                      className="text-sm font-normal"
+                    >
+                      {teacher}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
           
-          {/* Date range filters */}
-          <div className="space-y-4">
-            <Label className="text-base">Date Range</Label>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { value: 'all', label: 'All Time' },
-                { value: 'today', label: 'Today' },
-                { value: 'week', label: 'This Week' },
-                { value: 'month', label: 'This Month' }
-              ].map(range => (
-                <div key={range.value} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={`date-${range.value}`} 
-                    checked={dateRange === range.value}
-                    onCheckedChange={() => setDateRange(range.value as any)}
-                  />
-                  <label 
-                    htmlFor={`date-${range.value}`}
-                    className="text-sm cursor-pointer"
-                  >
-                    {range.label}
-                  </label>
-                </div>
-              ))}
-            </div>
+          <Separator />
+          
+          {/* Date range filter */}
+          <div className="space-y-3">
+            <Label className="font-medium">Date Range</Label>
+            <RadioGroup value={dateRange} onValueChange={setDateRange as any}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="all" id="dr-all" />
+                <Label htmlFor="dr-all">All Time</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="today" id="dr-today" />
+                <Label htmlFor="dr-today">Today</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="week" id="dr-week" />
+                <Label htmlFor="dr-week">This Week</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="month" id="dr-month" />
+                <Label htmlFor="dr-month">This Month</Label>
+              </div>
+            </RadioGroup>
           </div>
         </div>
         
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={handleResetFilter}>
-            Reset
+          <Button variant="outline" onClick={handleReset}>
+            Reset Filters
           </Button>
-          <Button type="button" onClick={handleApplyFilter}>
+          <Button onClick={handleApply}>
             Apply Filters
           </Button>
         </DialogFooter>

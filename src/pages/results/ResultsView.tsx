@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
@@ -379,6 +380,7 @@ const ResultsView: React.FC = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Semesters</SelectItem>
+                    {/* Make sure no empty string values in SelectItem */}
                     {uniqueSemesters.map(semester => (
                       <SelectItem key={semester} value={semester}>{semester}</SelectItem>
                     ))}
@@ -393,6 +395,7 @@ const ResultsView: React.FC = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Subjects</SelectItem>
+                    {/* Make sure no empty string values in SelectItem */}
                     {uniqueSubjects.map(subject => (
                       <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                     ))}
@@ -496,6 +499,12 @@ const ResultsView: React.FC = () => {
           />
         </main>
       </div>
+      
+      <ResultDetailDialog 
+        result={selectedResult} 
+        isOpen={isDetailDialogOpen} 
+        setIsOpen={setIsDetailDialogOpen} 
+      />
     </div>
   );
 };
