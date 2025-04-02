@@ -5,6 +5,7 @@ import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import { useResults } from '@/context/ResultsContext';
 import { useAuth } from '@/context/AuthContext';
+import { toast } from '@/components/ui/use-toast'; // Add this import
 import { 
   Card, 
   CardContent, 
