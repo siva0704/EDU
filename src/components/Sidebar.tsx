@@ -12,7 +12,9 @@ import {
   ChevronLeft, 
   ChevronRight,
   Settings,
-  LogOut
+  LogOut,
+  FileText,
+  GraduationCap
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -59,9 +61,11 @@ const Sidebar: React.FC = () => {
       { to: "/recordings", icon: Video, label: "Class Recordings", roles: ['admin', 'teacher', 'student'] },
       { to: "/attendance", icon: CheckSquare, label: "Digital Attendance", roles: ['admin', 'teacher', 'student'] },
       { to: "/lesson-plans", icon: BookOpen, label: "Lesson Plans", roles: ['admin', 'teacher', 'student'] },
+      { to: "/results", icon: FileText, label: "Exam Results", roles: ['admin', 'teacher', 'student'] },
+      { to: "/students", icon: GraduationCap, label: "Students", roles: ['admin', 'teacher'] },
       { to: "/contacts", icon: Users, label: "Department Contacts", roles: ['admin', 'teacher', 'student'] },
       { to: "/events", icon: Calendar, label: "Educational Events", roles: ['admin', 'teacher', 'student'] },
-      { to: "/settings", icon: Settings, label: "Settings", roles: ['admin'] }
+      { to: "/settings", icon: Settings, label: "Settings", roles: ['admin', 'teacher', 'student'] }
     ];
     
     return items

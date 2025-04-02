@@ -23,6 +23,10 @@ import Events from "./pages/Events";
 import Settings from "./pages/Settings";
 import TeacherSettings from "./pages/TeacherSettings";
 import StudentSettings from "./pages/StudentSettings";
+import Results from "./pages/Results"; // New import
+import ResultsManage from "./pages/results/ResultsManage"; // New import
+import ResultsView from "./pages/results/ResultsView"; // New import
+import Students from "./pages/Students"; // New import
 
 const queryClient = new QueryClient();
 
@@ -61,6 +65,40 @@ const App = () => {
           <Route path="/lesson-plans/filter" element={<FilterLessonPlans />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/events" element={<Events />} />
+          {/* New Results routes */}
+          <Route 
+            path="/results" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'teacher', 'student']}>
+                <Results />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/results/manage" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+                <ResultsManage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/results/view" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'teacher', 'student']}>
+                <ResultsView />
+              </ProtectedRoute>
+            } 
+          />
+          {/* New Students route */}
+          <Route 
+            path="/students" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'teacher']}>
+                <Students />
+              </ProtectedRoute>
+            } 
+          />
           <Route 
             path="/settings" 
             element={

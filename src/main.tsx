@@ -1,24 +1,23 @@
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-import { ThemeProvider } from './context/ThemeContext';
-import { Toaster } from '@/components/ui/sonner';
-import ThemeControls from './components/ThemeControls';
-import { AuthProvider } from './context/AuthContext';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom';
+import App from './App'
+import './index.css'
+import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { ResultsProvider } from './context/ResultsContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <BrowserRouter basename="/edu-hub-connector-21">
+    <BrowserRouter basename="/EDU">
+      <ThemeProvider>
         <AuthProvider>
-          <App />
-          <Toaster />
-          <ThemeControls />
+          <ResultsProvider>
+            <App />
+          </ResultsProvider>
         </AuthProvider>
-      </BrowserRouter>
-    </ThemeProvider>
-  </React.StrictMode>
-);
+      </ThemeProvider>
+    </BrowserRouter>
+  </React.StrictMode>,
+)
