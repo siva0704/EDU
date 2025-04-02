@@ -54,9 +54,9 @@ const ResultsManage: React.FC = () => {
   const navigate = useNavigate();
   
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedSubject, setSelectedSubject] = useState('all');
+  const [selectedSemester, setSelectedSemester] = useState('all');
   const [tabValue, setTabValue] = useState('all');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedResult, setSelectedResult] = useState<ExamResult | null>(null);
@@ -73,9 +73,9 @@ const ResultsManage: React.FC = () => {
       result.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
       result.examName.toLowerCase().includes(searchTerm.toLowerCase());
       
-    const matchesDepartment = selectedDepartment ? result.department === selectedDepartment : true;
-    const matchesSubject = selectedSubject ? result.subject === selectedSubject : true;
-    const matchesSemester = selectedSemester ? result.semester === selectedSemester : true;
+    const matchesDepartment = selectedDepartment === 'all' ? true : result.department === selectedDepartment;
+    const matchesSubject = selectedSubject === 'all' ? true : result.subject === selectedSubject;
+    const matchesSemester = selectedSemester === 'all' ? true : result.semester === selectedSemester;
     const matchesTab = 
       tabValue === 'all' ? true : 
       tabValue === 'published' ? result.status === 'published' : 
@@ -144,7 +144,7 @@ const ResultsManage: React.FC = () => {
                   <SelectValue placeholder="All Departments" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Departments</SelectItem>
+                  <SelectItem value="all">All Departments</SelectItem>
                   {departments.map((dept) => (
                     <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                   ))}
@@ -156,7 +156,7 @@ const ResultsManage: React.FC = () => {
                   <SelectValue placeholder="All Subjects" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Subjects</SelectItem>
+                  <SelectItem value="all">All Subjects</SelectItem>
                   {subjects.map((subject) => (
                     <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                   ))}
@@ -168,7 +168,7 @@ const ResultsManage: React.FC = () => {
                   <SelectValue placeholder="All Semesters" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Semesters</SelectItem>
+                  <SelectItem value="all">All Semesters</SelectItem>
                   {semesters.map((semester) => (
                     <SelectItem key={semester} value={semester}>{semester}</SelectItem>
                   ))}

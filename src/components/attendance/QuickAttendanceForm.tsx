@@ -149,7 +149,6 @@ const QuickAttendanceForm: React.FC<QuickAttendanceFormProps> = ({ onSubmit }) =
                 <SelectValue placeholder="Select a class" />
               </SelectTrigger>
               <SelectContent>
-                {/* Make sure no SelectItem has an empty string value */}
                 <SelectItem value="Anatomy">Anatomy</SelectItem>
                 <SelectItem value="Physiology">Physiology</SelectItem>
                 <SelectItem value="Pathology">Pathology</SelectItem>

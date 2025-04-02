@@ -182,9 +182,13 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
             </SelectTrigger>
             <SelectContent>
               {/* Make sure no empty values in SelectItem */}
-              {semesters.map(sem => (
-                <SelectItem key={sem} value={sem}>{sem}</SelectItem>
-              ))}
+              {semesters.length > 0 ? (
+                semesters.map(sem => (
+                  <SelectItem key={sem} value={sem}>{sem}</SelectItem>
+                ))
+              ) : (
+                <SelectItem value="default-semester">Default Semester</SelectItem>
+              )}
             </SelectContent>
           </Select>
         </div>

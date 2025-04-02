@@ -108,10 +108,10 @@ const historyData: (AttendanceRecord & { semester: string, week: number })[] = [
 
 const AttendanceHistory = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClass, setSelectedClass] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedClass, setSelectedClass] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('all');
   
   const filteredHistory = historyData.filter(record => {
     // Search filter
@@ -120,13 +120,13 @@ const AttendanceHistory = () => {
       record.class.toLowerCase().includes(searchTerm.toLowerCase());
     
     // Class filter
-    const matchesClass = selectedClass === '' || record.class === selectedClass;
+    const matchesClass = selectedClass === 'all' || record.class === selectedClass;
     
     // Status filter
-    const matchesStatus = selectedStatus === '' || record.status === selectedStatus;
+    const matchesStatus = selectedStatus === 'all' || record.status === selectedStatus;
     
     // Semester filter
-    const matchesSemester = selectedSemester === '' || record.semester === selectedSemester;
+    const matchesSemester = selectedSemester === 'all' || record.semester === selectedSemester;
     
     // Date filter
     const matchesDate = !selectedDate || record.date === format(selectedDate, 'MMM d, yyyy');
@@ -136,10 +136,10 @@ const AttendanceHistory = () => {
   
   const resetFilters = () => {
     setSearchTerm('');
-    setSelectedClass('');
-    setSelectedStatus('');
+    setSelectedClass('all');
+    setSelectedStatus('all');
     setSelectedDate(undefined);
-    setSelectedSemester('');
+    setSelectedSemester('all');
   };
   
   return (
@@ -193,7 +193,7 @@ const AttendanceHistory = () => {
                     <SelectValue placeholder="Class" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Classes</SelectItem>
+                    <SelectItem value="all">All Classes</SelectItem>
                     <SelectItem value="Mathematics 101">Mathematics 101</SelectItem>
                     <SelectItem value="Science 102">Science 102</SelectItem>
                     <SelectItem value="History 103">History 103</SelectItem>
@@ -206,7 +206,7 @@ const AttendanceHistory = () => {
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Statuses</SelectItem>
+                    <SelectItem value="all">All Statuses</SelectItem>
                     <SelectItem value="present">Present</SelectItem>
                     <SelectItem value="absent">Absent</SelectItem>
                     <SelectItem value="late">Late</SelectItem>
@@ -242,7 +242,7 @@ const AttendanceHistory = () => {
                     <SelectValue placeholder="Semester" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Semesters</SelectItem>
+                    <SelectItem value="all">All Semesters</SelectItem>
                     <SelectItem value="Spring 2023">Spring 2023</SelectItem>
                     <SelectItem value="Fall 2022">Fall 2022</SelectItem>
                     <SelectItem value="Summer 2022">Summer 2022</SelectItem>
