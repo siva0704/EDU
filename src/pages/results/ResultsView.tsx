@@ -120,8 +120,8 @@ const ResultsView: React.FC = () => {
   const { user, role } = useAuth();
   
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSemester, setSelectedSemester] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('all');
+  const [selectedSubject, setSelectedSubject] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
   const [selectedResult, setSelectedResult] = useState<ExamResult | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
@@ -131,8 +131,8 @@ const ResultsView: React.FC = () => {
     : results.filter(r => r.status === 'published');
     
   const filteredResults = userResults.filter(result => {
-    const matchesSemester = selectedSemester === '' || result.semester === selectedSemester;
-    const matchesSubject = selectedSubject === '' || result.subject === selectedSubject;
+    const matchesSemester = selectedSemester === 'all' || result.semester === selectedSemester;
+    const matchesSubject = selectedSubject === 'all' || result.subject === selectedSubject;
     const matchesSearch = searchTerm === '' || 
       result.examName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       result.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||

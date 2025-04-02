@@ -54,8 +54,8 @@ const Students: React.FC = () => {
   const { students, results, deleteStudent } = useResults();
   
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedSemester, setSelectedSemester] = useState('all');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   
@@ -70,8 +70,8 @@ const Students: React.FC = () => {
       student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase());
       
-    const matchesDepartment = selectedDepartment ? student.department === selectedDepartment : true;
-    const matchesSemester = selectedSemester ? student.semester === selectedSemester : true;
+    const matchesDepartment = selectedDepartment === 'all' ? true : student.department === selectedDepartment;
+    const matchesSemester = selectedSemester === 'all' ? true : student.semester === selectedSemester;
     
     return matchesSearch && matchesDepartment && matchesSemester;
   });
@@ -129,7 +129,7 @@ const Students: React.FC = () => {
                   <SelectValue placeholder="All Departments" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Departments</SelectItem>
+                  <SelectItem value="all">All Departments</SelectItem>
                   {departments.map((dept) => (
                     <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                   ))}
@@ -141,7 +141,7 @@ const Students: React.FC = () => {
                   <SelectValue placeholder="All Semesters" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Semesters</SelectItem>
+                  <SelectItem value="all">All Semesters</SelectItem>
                   {semesters.map((semester) => (
                     <SelectItem key={semester} value={semester}>{semester}</SelectItem>
                   ))}
