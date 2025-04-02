@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useResults } from '@/context/ResultsContext';
 import { useAuth } from '@/context/AuthContext';

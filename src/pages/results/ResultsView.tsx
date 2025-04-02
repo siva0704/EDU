@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import { useResults } from '@/context/ResultsContext';
 import { useAuth } from '@/context/AuthContext';
-import { toast } from '@/components/ui/use-toast'; // Add this import
+import { toast } from '@/components/ui/use-toast';
 import { 
   Card, 
   CardContent, 
@@ -127,12 +126,10 @@ const ResultsView: React.FC = () => {
   const [selectedResult, setSelectedResult] = useState<ExamResult | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   
-  // For student role, filter only their results
   let userResults = role === 'student' 
     ? results.filter(r => r.studentId === user?.id && r.status === 'published')
     : results.filter(r => r.status === 'published');
     
-  // Apply filters
   const filteredResults = userResults.filter(result => {
     const matchesSemester = selectedSemester === '' || result.semester === selectedSemester;
     const matchesSubject = selectedSubject === '' || result.subject === selectedSubject;
@@ -144,24 +141,20 @@ const ResultsView: React.FC = () => {
     return matchesSemester && matchesSubject && matchesSearch;
   });
   
-  // Sort results based on tab selection
   const sortedResults = [...filteredResults].sort((a, b) => {
     if (activeTab === 'recent') {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     } else if (activeTab === 'best') {
       return (b.score / b.totalMarks) - (a.score / a.totalMarks);
     }
-    // Default sorting by date (newest first)
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
   
-  // Calculate statistics
   const totalExams = userResults.length;
   const averageScore = totalExams > 0 
     ? Math.round(userResults.reduce((sum, result) => sum + (result.score / result.totalMarks * 100), 0) / totalExams) 
     : 0;
   
-  // Prepare chart data
   const subjectPerformance = role === 'student'
     ? [...new Set(userResults.map(r => r.subject))].map(subject => {
         const subjectResults = userResults.filter(r => r.subject === subject);
@@ -175,11 +168,9 @@ const ResultsView: React.FC = () => {
       })
     : [];
     
-  // Get unique values for filters
   const uniqueSemesters = Array.from(new Set(userResults.map(result => result.semester)));
   const uniqueSubjects = Array.from(new Set(userResults.map(result => result.subject)));
   
-  // Grade distribution for pie chart
   const gradeDistribution = role === 'student'
     ? [
         { name: 'A+/A/A-', count: userResults.filter(r => ['A+', 'A', 'A-'].includes(r.grade)).length },
@@ -219,7 +210,6 @@ const ResultsView: React.FC = () => {
           
           {role === 'student' && (
             <div className="mb-6">
-              {/* Overall performance cards for student */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                   <CardHeader className="pb-2">
@@ -283,9 +273,7 @@ const ResultsView: React.FC = () => {
                 </Card>
               </div>
               
-              {/* Charts for student */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                {/* Subject Performance Chart */}
                 <Card className="overflow-hidden">
                   <CardHeader>
                     <CardTitle className="text-base flex items-center">
@@ -339,7 +327,6 @@ const ResultsView: React.FC = () => {
                   </CardContent>
                 </Card>
                 
-                {/* Grade Distribution Chart */}
                 <Card className="overflow-hidden">
                   <CardHeader>
                     <CardTitle className="text-base flex items-center">
@@ -383,7 +370,6 @@ const ResultsView: React.FC = () => {
             </div>
           )}
           
-          {/* Filters and tabs */}
           <div className="flex flex-col gap-4 my-6">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="w-full sm:w-40">
@@ -392,7 +378,7 @@ const ResultsView: React.FC = () => {
                     <SelectValue placeholder="All Semesters" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Semesters</SelectItem>
+                    <SelectItem value="all">All Semesters</SelectItem>
                     {uniqueSemesters.map(semester => (
                       <SelectItem key={semester} value={semester}>{semester}</SelectItem>
                     ))}
@@ -406,7 +392,7 @@ const ResultsView: React.FC = () => {
                     <SelectValue placeholder="All Subjects" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Subjects</SelectItem>
+                    <SelectItem value="all">All Subjects</SelectItem>
                     {uniqueSubjects.map(subject => (
                       <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                     ))}
@@ -442,7 +428,6 @@ const ResultsView: React.FC = () => {
             </Tabs>
           </div>
           
-          {/* Results table */}
           <div className="bg-white dark:bg-black/40 rounded-xl border shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -504,7 +489,6 @@ const ResultsView: React.FC = () => {
             </div>
           </div>
           
-          {/* Result Detail Dialog */}
           <ResultDetailDialog 
             result={selectedResult} 
             isOpen={isDetailDialogOpen} 

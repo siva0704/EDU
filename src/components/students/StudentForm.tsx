@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useResults } from '@/context/ResultsContext';
 import { Button } from '@/components/ui/button';
@@ -44,7 +43,6 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
   const [yearOfStudy, setYearOfStudy] = useState(initialData?.yearOfStudy?.toString() || '1');
   const [isActive, setIsActive] = useState(initialData?.status !== 'inactive');
   
-  // Sample departments
   const departments = [
     'Computer Science',
     'Mathematics',
@@ -57,7 +55,6 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
     'Literature'
   ];
   
-  // Sample semesters
   const semesters = [
     'Fall 2023',
     'Spring 2023',
