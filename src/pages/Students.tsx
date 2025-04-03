@@ -91,6 +91,18 @@ const Students: React.FC = () => {
     return results.filter(r => r.studentId === studentId).length;
   };
   
+  const handleAddStudent = (student: Omit<Student, 'id'>) => {
+    addStudent(student);
+    setIsAddDialogOpen(false);
+  };
+  
+  const handleUpdateStudent = (student: Omit<Student, 'id'>) => {
+    if (selectedStudent) {
+      updateStudent(selectedStudent.id, student);
+      setIsAddDialogOpen(false);
+    }
+  };
+  
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
@@ -257,6 +269,7 @@ const Students: React.FC = () => {
               
               <StudentForm 
                 initialData={selectedStudent}
+                onSubmit={selectedStudent ? handleUpdateStudent : handleAddStudent}
                 onClose={() => setIsAddDialogOpen(false)} 
               />
             </DialogContent>

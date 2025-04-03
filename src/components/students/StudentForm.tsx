@@ -16,7 +16,7 @@ import type { Student } from '@/types/results';
 interface StudentFormProps {
   initialData?: Student;
   onSubmit: (student: Omit<Student, 'id'>) => void;
-  onCancel: () => void;
+  onClose: () => void;
 }
 
 const generateRegistrationNumber = (): string => {
@@ -26,7 +26,7 @@ const generateRegistrationNumber = (): string => {
 const StudentForm: React.FC<StudentFormProps> = ({
   initialData,
   onSubmit,
-  onCancel
+  onClose
 }) => {
   const [name, setName] = useState(initialData?.name || '');
   const [email, setEmail] = useState(initialData?.email || '');
@@ -223,7 +223,7 @@ const StudentForm: React.FC<StudentFormProps> = ({
       </div>
       
       <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={onClose}>
           Cancel
         </Button>
         <Button type="submit">
