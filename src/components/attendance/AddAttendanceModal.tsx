@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { toast } from '@/components/ui/use-toast';
-import { AttendanceRecord } from '@/components/AttendanceTable';
+import { Input } from '@/components/ui/input';
+import { getSubjectsByClass } from '@/types/results';
+import { AttendanceRecord } from '../AttendanceTable';
 
 interface AddAttendanceModalProps {
   isOpen: boolean;
@@ -16,139 +16,154 @@ interface AddAttendanceModalProps {
 
 const AddAttendanceModal: React.FC<AddAttendanceModalProps> = ({ isOpen, onClose, onSave }) => {
   const [student, setStudent] = useState('');
-  const [classTitle, setClassTitle] = useState('');
+  const [classValue, setClassValue] = useState('Class 1');
   const [status, setStatus] = useState<'present' | 'absent' | 'late' | 'excused'>('present');
   const [timeIn, setTimeIn] = useState('');
   const [timeOut, setTimeOut] = useState('');
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Get class number from class value
+  const classNumber = parseInt(classValue.split(' ')[1]);
+  
+  // Get subjects for the selected class
+  const subjectsForClass = getSubjectsByClass(classNumber);
+  const [subject, setSubject] = useState(subjectsForClass[0]);
+
+  const handleSubmit = () => {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
     
-    if (!student || !classTitle) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    const currentDate = new Date().toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric'
+    onSave({
+      student,
+      class: classValue,
+      subject, // Added subject field
+      status,
+      date: formattedDate,
+      timeIn,
+      timeOut
     });
     
-    const newRecord: Omit<AttendanceRecord, 'id'> = {
-      student,
-      class: classTitle,
-      status,
-      date: currentDate,
-      timeIn: status === 'present' || status === 'late' ? (timeIn || '09:00 AM') : undefined,
-      timeOut: status === 'present' || status === 'late' ? (timeOut || '10:30 AM') : undefined,
-    };
-    
-    onSave(newRecord);
     resetForm();
+    onClose();
   };
   
   const resetForm = () => {
     setStudent('');
-    setClassTitle('');
+    setClassValue('Class 1');
     setStatus('present');
     setTimeIn('');
     setTimeOut('');
-    onClose();
+    setSubject(subjectsForClass[0]);
   };
   
+  const handleClassChange = (value: string) => {
+    setClassValue(value);
+    const newClassNumber = parseInt(value.split(' ')[1]);
+    const newSubjectsForClass = getSubjectsByClass(newClassNumber);
+    setSubject(newSubjectsForClass[0]);
+  };
+  
+  // Generate class options (Class 1 to Class 10)
+  const classOptions = Array.from({ length: 10 }, (_, i) => `Class ${i + 1}`);
+  
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Attendance Record</DialogTitle>
           <DialogDescription>
-            Create a new attendance record. Fill in the details below.
+            Create a new attendance record for a student.
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4 py-4">
-          <div className="grid grid-cols-1 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="student">Student Name <span className="text-red-500">*</span></Label>
-              <Input
-                id="student"
-                value={student}
-                onChange={(e) => setStudent(e.target.value)}
-                placeholder="John Doe"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="class">Class <span className="text-red-500">*</span></Label>
-              <Input
-                id="class"
-                value={classTitle}
-                onChange={(e) => setClassTitle(e.target.value)}
-                placeholder="Mathematics 101"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Attendance Status <span className="text-red-500">*</span></Label>
-              <RadioGroup value={status} onValueChange={(value) => setStatus(value as 'present' | 'absent' | 'late' | 'excused')}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="present" id="present" />
-                  <Label htmlFor="present">Present</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="absent" id="absent" />
-                  <Label htmlFor="absent">Absent</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="late" id="late" />
-                  <Label htmlFor="late">Late</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="excused" id="excused" />
-                  <Label htmlFor="excused">Excused</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            
-            {(status === 'present' || status === 'late') && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="timeIn">Time In</Label>
-                  <Input
-                    id="timeIn"
-                    value={timeIn}
-                    onChange={(e) => setTimeIn(e.target.value)}
-                    placeholder="09:00 AM"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="timeOut">Time Out</Label>
-                  <Input
-                    id="timeOut"
-                    value={timeOut}
-                    onChange={(e) => setTimeOut(e.target.value)}
-                    placeholder="10:30 AM"
-                  />
-                </div>
-              </div>
-            )}
+        <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="student">Student Name</Label>
+            <Input
+              id="student"
+              placeholder="Enter student name"
+              value={student}
+              onChange={(e) => setStudent(e.target.value)}
+            />
           </div>
           
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={resetForm}>
-              Cancel
-            </Button>
-            <Button type="submit">Save Record</Button>
-          </DialogFooter>
-        </form>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="class">Class</Label>
+              <Select value={classValue} onValueChange={handleClassChange}>
+                <SelectTrigger id="class">
+                  <SelectValue placeholder="Select class" />
+                </SelectTrigger>
+                <SelectContent>
+                  {classOptions.map((cls) => (
+                    <SelectItem key={cls} value={cls}>
+                      {cls}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="subject">Subject</Label>
+              <Select value={subject} onValueChange={setSubject}>
+                <SelectTrigger id="subject">
+                  <SelectValue placeholder="Select subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subjectsForClass.map((subj) => (
+                    <SelectItem key={subj} value={subj}>
+                      {subj}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <div className="grid gap-2">
+            <Label htmlFor="status">Status</Label>
+            <Select value={status} onValueChange={(value: 'present' | 'absent' | 'late' | 'excused') => setStatus(value)}>
+              <SelectTrigger id="status">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="present">Present</SelectItem>
+                <SelectItem value="absent">Absent</SelectItem>
+                <SelectItem value="late">Late</SelectItem>
+                <SelectItem value="excused">Excused</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="timeIn">Time In</Label>
+              <Input
+                id="timeIn"
+                placeholder="e.g., 09:00 AM"
+                value={timeIn}
+                onChange={(e) => setTimeIn(e.target.value)}
+                disabled={status === 'absent' || status === 'excused'}
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="timeOut">Time Out</Label>
+              <Input
+                id="timeOut"
+                placeholder="e.g., 10:30 AM"
+                value={timeOut}
+                onChange={(e) => setTimeOut(e.target.value)}
+                disabled={status === 'absent' || status === 'excused'}
+              />
+            </div>
+          </div>
+        </div>
+        
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSubmit} disabled={!student}>Save Record</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
