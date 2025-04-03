@@ -5,89 +5,105 @@ import { ExamResult, Student, calculateGrade } from "@/types/results";
 export const mockStudents: Student[] = [
   {
     id: 'student-1',
-    name: 'John Smith',
-    email: 'john.smith@example.com',
+    name: 'Rahul Sharma',
+    email: 'rahul.sharma@example.com',
     registrationNumber: 'STU2023001',
-    department: 'Computer Science',
-    enrollmentDate: '2023-09-01',
-    semester: 'Fall 2023',
+    department: 'Class 5',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student1',
     status: 'active',
-    yearOfStudy: 2
+    yearOfStudy: 'A'
   },
   {
     id: 'student-2',
-    name: 'Emma Johnson',
-    email: 'emma.johnson@example.com',
+    name: 'Priya Patel',
+    email: 'priya.patel@example.com',
     registrationNumber: 'STU2023002',
-    department: 'Mathematics',
-    enrollmentDate: '2023-09-01',
-    semester: 'Fall 2023',
+    department: 'Class 3',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student2',
     status: 'active',
-    yearOfStudy: 1
+    yearOfStudy: 'B'
   },
   {
     id: 'student-3',
-    name: 'Michael Brown',
-    email: 'michael.brown@example.com',
+    name: 'Arjun Singh',
+    email: 'arjun.singh@example.com',
     registrationNumber: 'STU2023003',
-    department: 'Physics',
-    enrollmentDate: '2022-09-01',
-    semester: 'Fall 2023',
+    department: 'Class 7',
+    enrollmentDate: '2022-04-01',
+    semester: '2023-2024',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student3',
     status: 'active',
-    yearOfStudy: 2
+    yearOfStudy: 'A'
   },
   {
     id: 'student-4',
-    name: 'Sophia Williams',
-    email: 'sophia.williams@example.com',
+    name: 'Ananya Gupta',
+    email: 'ananya.gupta@example.com',
     registrationNumber: 'STU2023004',
-    department: 'Biology',
-    enrollmentDate: '2023-09-01',
-    semester: 'Fall 2023',
+    department: 'Class 9',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student4',
     status: 'active',
-    yearOfStudy: 1
+    yearOfStudy: 'C'
   },
   {
     id: 'student-5',
-    name: 'Daniel Jones',
-    email: 'daniel.jones@example.com',
+    name: 'Vikram Iyer',
+    email: 'vikram.iyer@example.com',
     registrationNumber: 'STU2022001',
-    department: 'Chemistry',
-    enrollmentDate: '2022-09-01',
-    semester: 'Fall 2023',
+    department: 'Class 10',
+    enrollmentDate: '2022-04-01',
+    semester: '2023-2024',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student5',
     status: 'active',
-    yearOfStudy: 2
+    yearOfStudy: 'B'
   }
 ];
 
 // Create results based on students
 export const generateMockResults = (): ExamResult[] => {
-  const subjects = [
-    'Mathematics 101', 
-    'Physics 201', 
-    'Computer Science 102', 
-    'Biology 101',
-    'Chemistry 201',
-    'Literature 101',
-    'Programming 202'
+  const primarySubjects = [
+    'Hindi', 
+    'English', 
+    'Mathematics', 
+    'Environmental Studies',
+    'General Knowledge'
+  ];
+  
+  const middleSubjects = [
+    'Hindi',
+    'English',
+    'Mathematics',
+    'Science',
+    'Social Studies',
+    'Sanskrit'
+  ];
+  
+  const highSubjects = [
+    'Hindi',
+    'English',
+    'Mathematics',
+    'Science',
+    'Social Science',
+    'Sanskrit/Computer'
   ];
   
   const examNames = [
-    'Mid-term Exam',
+    'Unit Test 1',
+    'Mid-Term Exam',
+    'Unit Test 2',
     'Final Exam',
-    'Quiz 1',
-    'Quiz 2',
-    'Project Presentation',
-    'Lab Assessment',
-    'Essay Submission'
+    'Quarterly Assessment',
+    'Half-Yearly Assessment',
+    'Annual Assessment'
   ];
   
-  const semesters = ['Fall 2023', 'Spring 2023', 'Summer 2023'];
+  const academicYears = ['2023-2024', '2022-2023', '2021-2022'];
   
   const results: ExamResult[] = [];
   let resultId = 1;
@@ -96,10 +112,22 @@ export const generateMockResults = (): ExamResult[] => {
     // Assign 3-5 random exam results to each student
     const numResults = Math.floor(Math.random() * 3) + 3;
     
+    // Select appropriate subjects based on class
+    let subjectsForClass: string[] = [];
+    const classNumber = parseInt(student.department.split(' ')[1]);
+    
+    if (classNumber <= 5) {
+      subjectsForClass = primarySubjects;
+    } else if (classNumber <= 8) {
+      subjectsForClass = middleSubjects;
+    } else {
+      subjectsForClass = highSubjects;
+    }
+    
     for (let i = 0; i < numResults; i++) {
-      const subject = subjects[Math.floor(Math.random() * subjects.length)];
+      const subject = subjectsForClass[Math.floor(Math.random() * subjectsForClass.length)];
       const examName = examNames[Math.floor(Math.random() * examNames.length)];
-      const semester = semesters[Math.floor(Math.random() * semesters.length)];
+      const semester = academicYears[Math.floor(Math.random() * academicYears.length)];
       const score = Math.floor(Math.random() * 40) + 60; // Scores between 60-100
       const totalMarks = 100;
       

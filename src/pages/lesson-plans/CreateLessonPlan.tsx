@@ -18,6 +18,47 @@ const CreateLessonPlan = () => {
   const [duration, setDuration] = useState('');
   const [objectives, setObjectives] = useState('');
   const [resources, setResources] = useState('');
+
+  // Subject options based on grade level
+  const getSubjects = (selectedGrade: string) => {
+    const classNumber = parseInt(selectedGrade?.replace('Class ', '') || '0');
+    
+    if (classNumber >= 1 && classNumber <= 5) {
+      return [
+        'Hindi',
+        'English',
+        'Mathematics',
+        'Environmental Studies',
+        'General Knowledge',
+        'Art & Craft',
+        'Physical Education'
+      ];
+    } else if (classNumber >= 6 && classNumber <= 8) {
+      return [
+        'Hindi',
+        'English',
+        'Mathematics',
+        'Science',
+        'Social Studies',
+        'Sanskrit',
+        'Art Education',
+        'Physical Education',
+        'Computer Science'
+      ];
+    } else if (classNumber >= 9 && classNumber <= 10) {
+      return [
+        'Hindi',
+        'English',
+        'Mathematics',
+        'Science',
+        'Social Science',
+        'Sanskrit/Computer',
+        'Physical Education',
+        'Art Education'
+      ];
+    }
+    return [];
+  };
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,17 +108,22 @@ const CreateLessonPlan = () => {
               
               <div className="space-y-3">
                 <label className="text-sm font-medium">
-                  Subject
-                  <Select value={subject} onValueChange={setSubject} required>
+                  Class
+                  <Select value={grade} onValueChange={setGrade} required>
                     <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select subject" />
+                      <SelectValue placeholder="Select class" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Anatomy">Anatomy</SelectItem>
-                      <SelectItem value="Physiology">Physiology</SelectItem>
-                      <SelectItem value="Pathology">Pathology</SelectItem>
-                      <SelectItem value="Microbiology">Microbiology</SelectItem>
-                      <SelectItem value="Pharmacology">Pharmacology</SelectItem>
+                      <SelectItem value="Class 1">Class 1</SelectItem>
+                      <SelectItem value="Class 2">Class 2</SelectItem>
+                      <SelectItem value="Class 3">Class 3</SelectItem>
+                      <SelectItem value="Class 4">Class 4</SelectItem>
+                      <SelectItem value="Class 5">Class 5</SelectItem>
+                      <SelectItem value="Class 6">Class 6</SelectItem>
+                      <SelectItem value="Class 7">Class 7</SelectItem>
+                      <SelectItem value="Class 8">Class 8</SelectItem>
+                      <SelectItem value="Class 9">Class 9</SelectItem>
+                      <SelectItem value="Class 10">Class 10</SelectItem>
                     </SelectContent>
                   </Select>
                 </label>
@@ -85,25 +131,15 @@ const CreateLessonPlan = () => {
               
               <div className="space-y-3">
                 <label className="text-sm font-medium">
-                  Grade Level
-                  <Select value={grade} onValueChange={setGrade} required>
+                  Subject
+                  <Select value={subject} onValueChange={setSubject} required>
                     <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select grade" />
+                      <SelectValue placeholder="Select subject" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="K">Kindergarten</SelectItem>
-                      <SelectItem value="1">1st Grade</SelectItem>
-                      <SelectItem value="2">2nd Grade</SelectItem>
-                      <SelectItem value="3">3rd Grade</SelectItem>
-                      <SelectItem value="4">4th Grade</SelectItem>
-                      <SelectItem value="5">5th Grade</SelectItem>
-                      <SelectItem value="6">6th Grade</SelectItem>
-                      <SelectItem value="7">7th Grade</SelectItem>
-                      <SelectItem value="8">8th Grade</SelectItem>
-                      <SelectItem value="9">9th Grade</SelectItem>
-                      <SelectItem value="10">10th Grade</SelectItem>
-                      <SelectItem value="11">11th Grade</SelectItem>
-                      <SelectItem value="12">12th Grade</SelectItem>
+                      {getSubjects(grade).map((subj) => (
+                        <SelectItem key={subj} value={subj}>{subj}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </label>

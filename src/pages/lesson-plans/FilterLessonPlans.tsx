@@ -10,130 +10,155 @@ import { toast } from '@/components/ui/use-toast';
 import { ArrowLeft, Filter } from 'lucide-react';
 import { LessonPlanProps } from '../../components/LessonPlanCard';
 
-// Medical subjects
-const MEDICAL_SUBJECTS = [
-  'Anatomy',
-  'Physiology',
-  'Pathology',
-  'Microbiology',
-  'Pharmacology'
+// Subjects by class level
+const PRIMARY_SUBJECTS = [
+  'Hindi',
+  'English',
+  'Mathematics',
+  'Environmental Studies',
+  'General Knowledge',
+  'Art & Craft',
+  'Physical Education'
 ];
 
-// Sample data (updated with medical subjects)
+const MIDDLE_SUBJECTS = [
+  'Hindi',
+  'English',
+  'Mathematics',
+  'Science',
+  'Social Studies',
+  'Sanskrit',
+  'Art Education',
+  'Physical Education',
+  'Computer Science'
+];
+
+const HIGH_SUBJECTS = [
+  'Hindi',
+  'English',
+  'Mathematics',
+  'Science',
+  'Social Science',
+  'Sanskrit/Computer',
+  'Physical Education',
+  'Art Education'
+];
+
+// Sample data (updated with Indian education system)
 const sampleLessonPlans: LessonPlanProps[] = [
   {
     id: '1',
-    title: 'Musculoskeletal System Overview',
-    subject: 'Anatomy',
-    grade: '9',
+    title: 'Introduction to Addition',
+    subject: 'Mathematics',
+    grade: 'Class 1',
     date: 'Apr 15, 2023',
-    duration: '60 mins',
+    duration: '40 mins',
     objectives: [
-      'Identify major bones and muscles',
-      'Understand joint structure and function',
-      'Explain the relationship between bones and muscles'
+      'Identify numbers 1 to 20',
+      'Understand the concept of addition',
+      'Solve simple addition problems'
     ],
     resources: [
-      'Textbook: Human Anatomy, pp. 45-52',
-      'Skeleton Model',
-      'Digital Anatomy Software'
+      'Number cards',
+      'Counting beads',
+      'Worksheets with simple addition problems'
     ],
-    teacher: 'Dr. John Smith'
+    teacher: 'Mrs. Sharma'
   },
   {
     id: '2',
-    title: 'Cardiovascular Physiology',
-    subject: 'Physiology',
-    grade: '10',
+    title: 'Living and Non-living Things',
+    subject: 'Environmental Studies',
+    grade: 'Class 3',
     date: 'Apr 16, 2023',
     duration: '45 mins',
     objectives: [
-      'Describe cardiac cycle phases',
-      'Explain blood pressure regulation',
-      'Analyze factors affecting cardiac output'
+      'Distinguish between living and non-living things',
+      'Identify characteristics of living things',
+      'Classify objects as living or non-living'
     ],
     resources: [
-      'Textbook: Human Physiology, Chapter 3',
-      'Heart Model',
-      'Blood Pressure Monitoring Equipment'
+      'Textbook: EVS Chapter 2',
+      'Picture cards of various objects',
+      'Nature walk materials'
     ],
-    teacher: 'Dr. Sarah Davis'
+    teacher: 'Mr. Verma'
   },
   {
     id: '3',
-    title: 'Cellular Mechanisms of Disease',
-    subject: 'Pathology',
-    grade: '11',
+    title: 'Introduction to Photosynthesis',
+    subject: 'Science',
+    grade: 'Class 7',
     date: 'Apr 17, 2023',
-    duration: '90 mins',
+    duration: '50 mins',
     objectives: [
-      'Understand cell injury mechanisms',
-      'Identify patterns of inflammation',
-      'Analyze tissue repair processes'
+      'Explain the process of photosynthesis',
+      'Identify parts of a plant involved in photosynthesis',
+      'Demonstrate understanding of energy conversion in plants'
     ],
     resources: [
-      'Pathology Atlas',
-      'Microscope Slides Collection',
-      'Online Pathology Database'
+      'Science textbook Chapter 5',
+      'Plant specimens',
+      'Diagram of photosynthesis process'
     ],
-    teacher: 'Dr. Michael Brown'
+    teacher: 'Dr. Gupta'
   },
   {
     id: '4',
-    title: 'Bacteriology Fundamentals',
-    subject: 'Microbiology',
-    grade: '10',
+    title: 'पत्र लेखन (Letter Writing)',
+    subject: 'Hindi',
+    grade: 'Class 5',
     date: 'Apr 18, 2023',
-    duration: '55 mins',
+    duration: '45 mins',
     objectives: [
-      'Classify bacteria by morphology',
-      'Perform and interpret Gram staining',
-      'Identify common pathogenic bacteria'
+      'Understand formal letter format',
+      'Write a letter to a friend',
+      'Use appropriate salutation and closing'
     ],
     resources: [
-      'Microbiology Manual',
-      'Microscope Equipment',
-      'Bacterial Culture Samples'
+      'Hindi Textbook',
+      'Sample letters',
+      'Notebook and writing materials'
     ],
-    teacher: 'Dr. Amanda Miller'
+    teacher: 'Mrs. Rao'
   },
   {
     id: '5',
-    title: 'Principles of Drug Action',
-    subject: 'Pharmacology',
-    grade: '12',
+    title: 'Chemical Reactions and Equations',
+    subject: 'Science',
+    grade: 'Class 10',
     date: 'Apr 19, 2023',
-    duration: '75 mins',
+    duration: '60 mins',
     objectives: [
-      'Explain drug absorption and distribution',
-      'Analyze receptor-mediated drug effects',
-      'Calculate dosage and pharmacokinetics'
+      'Balance chemical equations',
+      'Identify types of chemical reactions',
+      'Write chemical equations for common reactions'
     ],
     resources: [
-      'Pharmacology Textbook',
-      'Drug Interaction Charts',
-      'Simulation Software'
+      'Science textbook Chapter 3',
+      'Chemical equation cards',
+      'Periodic table chart'
     ],
-    teacher: 'Dr. Robert Williams'
+    teacher: 'Dr. Kumar'
   },
   {
     id: '6',
-    title: 'Nervous System Anatomy',
-    subject: 'Anatomy',
-    grade: '11',
+    title: 'Tenses in English',
+    subject: 'English',
+    grade: 'Class 8',
     date: 'Apr 20, 2023',
-    duration: '60 mins',
+    duration: '50 mins',
     objectives: [
-      'Identify major structures of the brain',
-      'Describe spinal cord organization',
-      'Trace major neural pathways'
+      'Identify different tenses in English',
+      'Use present, past, and future tense correctly',
+      'Convert sentences from one tense to another'
     ],
     resources: [
-      'Brain Models',
-      'Neuroanatomy Atlas',
-      'Cross-section Diagrams'
+      'English Grammar Book',
+      'Worksheet on tenses',
+      'Flashcards with example sentences'
     ],
-    teacher: 'Dr. Emily Johnson'
+    teacher: 'Ms. D\'Souza'
   }
 ];
 
@@ -141,12 +166,15 @@ const FilterLessonPlans = () => {
   const navigate = useNavigate();
   
   // Extract unique grades and teachers from data
-  const grades = Array.from(new Set(sampleLessonPlans.map(plan => plan.grade)));
+  const classes = Array.from(new Set(sampleLessonPlans.map(plan => plan.grade)));
   const teachers = Array.from(new Set(sampleLessonPlans.map(plan => plan.teacher)));
+  
+  // All available subjects
+  const allSubjects = [...new Set([...PRIMARY_SUBJECTS, ...MIDDLE_SUBJECTS, ...HIGH_SUBJECTS])];
   
   // Filter state
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedGrades, setSelectedGrades] = useState<string[]>([]);
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
   const [selectedTeachers, setSelectedTeachers] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<string>('all');
   
@@ -159,11 +187,11 @@ const FilterLessonPlans = () => {
     );
   };
   
-  const toggleGrade = (grade: string) => {
-    setSelectedGrades(prev => 
-      prev.includes(grade) 
-        ? prev.filter(g => g !== grade) 
-        : [...prev, grade]
+  const toggleClass = (cls: string) => {
+    setSelectedClasses(prev => 
+      prev.includes(cls) 
+        ? prev.filter(c => c !== cls) 
+        : [...prev, cls]
     );
   };
   
@@ -181,7 +209,7 @@ const FilterLessonPlans = () => {
     // with filtered results
     const filters = {
       subjects: selectedSubjects,
-      grades: selectedGrades,
+      classes: selectedClasses,
       teachers: selectedTeachers,
       dateRange
     };
@@ -199,7 +227,7 @@ const FilterLessonPlans = () => {
   
   const handleClearFilters = () => {
     setSelectedSubjects([]);
-    setSelectedGrades([]);
+    setSelectedClasses([]);
     setSelectedTeachers([]);
     setDateRange('all');
   };
@@ -223,7 +251,7 @@ const FilterLessonPlans = () => {
             <div className="border rounded-lg p-4">
               <h3 className="text-lg font-medium mb-3">Subject</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {MEDICAL_SUBJECTS.map(subject => (
+                {allSubjects.map(subject => (
                   <div key={subject} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`subject-${subject}`} 
@@ -239,17 +267,17 @@ const FilterLessonPlans = () => {
             </div>
             
             <div className="border rounded-lg p-4">
-              <h3 className="text-lg font-medium mb-3">Grade Level</h3>
+              <h3 className="text-lg font-medium mb-3">Class</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {grades.map(grade => (
-                  <div key={grade} className="flex items-center space-x-2">
+                {classes.map(cls => (
+                  <div key={cls} className="flex items-center space-x-2">
                     <Checkbox 
-                      id={`grade-${grade}`} 
-                      checked={selectedGrades.includes(grade)}
-                      onCheckedChange={() => toggleGrade(grade)}
+                      id={`class-${cls}`} 
+                      checked={selectedClasses.includes(cls)}
+                      onCheckedChange={() => toggleClass(cls)}
                     />
-                    <label htmlFor={`grade-${grade}`} className="text-sm">
-                      Grade {grade}
+                    <label htmlFor={`class-${cls}`} className="text-sm">
+                      {cls}
                     </label>
                   </div>
                 ))}

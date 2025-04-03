@@ -44,24 +44,23 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
   const [yearOfStudy, setYearOfStudy] = useState(initialData?.yearOfStudy?.toString() || '1');
   const [isActive, setIsActive] = useState(initialData?.status !== 'inactive');
   
-  const departments = [
-    'Computer Science',
-    'Mathematics',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'Engineering',
-    'Economics',
-    'Business',
-    'Literature'
+  const classes = [
+    'Class 1',
+    'Class 2',
+    'Class 3',
+    'Class 4',
+    'Class 5',
+    'Class 6',
+    'Class 7',
+    'Class 8',
+    'Class 9',
+    'Class 10'
   ];
   
   const semesters = [
-    'Fall 2023',
-    'Spring 2023',
-    'Summer 2023',
-    'Fall 2022',
-    'Spring 2022'
+    '2023-2024',
+    '2022-2023',
+    '2021-2022'
   ];
   
   const validateEmail = (email: string) => {
@@ -137,14 +136,14 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="department">Department</Label>
+          <Label htmlFor="department">Class</Label>
           <Select value={department} onValueChange={setDepartment}>
             <SelectTrigger>
-              <SelectValue placeholder="Select a department" />
+              <SelectValue placeholder="Select a class" />
             </SelectTrigger>
             <SelectContent>
-              {departments.map(dept => (
-                <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+              {classes.map(cls => (
+                <SelectItem key={cls} value={cls}>{cls}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -179,10 +178,10 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="semester">Current Semester</Label>
+          <Label htmlFor="semester">Academic Year</Label>
           <Select value={semester} onValueChange={setSemester}>
             <SelectTrigger>
-              <SelectValue placeholder="Select a semester" />
+              <SelectValue placeholder="Select academic year" />
             </SelectTrigger>
             <SelectContent>
               {semesters.map(sem => (
@@ -195,14 +194,14 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="yearOfStudy">Year of Study</Label>
+          <Label htmlFor="yearOfStudy">Section</Label>
           <Select value={yearOfStudy} onValueChange={setYearOfStudy}>
             <SelectTrigger>
-              <SelectValue placeholder="Select year" />
+              <SelectValue placeholder="Select section" />
             </SelectTrigger>
             <SelectContent>
-              {[1, 2, 3, 4, 5, 6].map(year => (
-                <SelectItem key={year} value={year.toString()}>Year {year}</SelectItem>
+              {['A', 'B', 'C', 'D'].map(section => (
+                <SelectItem key={section} value={section}>Section {section}</SelectItem>
               ))}
             </SelectContent>
           </Select>

@@ -46,18 +46,58 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
   const [feedback, setFeedback] = useState(initialData?.feedback || '');
   const [semester, setSemester] = useState(initialData?.semester || '');
   
-  // Get unique semesters from students
-  const semesters = [...new Set(students.map(s => s.semester))];
+  // Get unique academic years from students
+  const academicYears = [...new Set(students.map(s => s.semester))];
+
+  // Get subject options based on student's class
+  const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
   
-  // Get unique subjects
-  const subjects = [
-    'Mathematics 101', 
-    'Physics 201', 
-    'Computer Science 102', 
-    'Biology 101',
-    'Chemistry 201',
-    'Literature 101',
-    'Programming 202'
+  useEffect(() => {
+    if (studentId) {
+      const selectedStudent = students.find(s => s.id === studentId);
+      if (selectedStudent) {
+        const classNumber = parseInt(selectedStudent.department.split(' ')[1]);
+        
+        if (classNumber <= 5) {
+          setAvailableSubjects([
+            'Hindi',
+            'English',
+            'Mathematics',
+            'Environmental Studies',
+            'General Knowledge'
+          ]);
+        } else if (classNumber <= 8) {
+          setAvailableSubjects([
+            'Hindi',
+            'English',
+            'Mathematics',
+            'Science',
+            'Social Studies',
+            'Sanskrit'
+          ]);
+        } else {
+          setAvailableSubjects([
+            'Hindi',
+            'English',
+            'Mathematics',
+            'Science',
+            'Social Science',
+            'Sanskrit/Computer'
+          ]);
+        }
+      }
+    }
+  }, [studentId, students]);
+  
+  // Exam types
+  const examTypes = [
+    'Unit Test 1',
+    'Mid-Term Exam',
+    'Unit Test 2',
+    'Final Exam',
+    'Quarterly Assessment',
+    'Half-Yearly Assessment',
+    'Annual Assessment'
   ];
   
   // Calculate grade based on score
@@ -114,7 +154,7 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
           <SelectContent>
             {students.map(student => (
               <SelectItem key={student.id} value={student.id}>
-                {student.name} ({student.registrationNumber})
+                {student.name} ({student.registrationNumber}) - {student.department}
               </SelectItem>
             ))}
           </SelectContent>
@@ -129,7 +169,7 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
               <SelectValue placeholder="Select a subject" />
             </SelectTrigger>
             <SelectContent>
-              {subjects.map(sub => (
+              {availableSubjects.map(sub => (
                 <SelectItem key={sub} value={sub}>{sub}</SelectItem>
               ))}
             </SelectContent>
@@ -137,13 +177,17 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="examName">Exam Name</Label>
-          <Input 
-            id="examName"
-            value={examName}
-            onChange={(e) => setExamName(e.target.value)}
-            placeholder="Mid-term Exam, Quiz 1, etc."
-          />
+          <Label htmlFor="examName">Exam Type</Label>
+          <Select value={examName} onValueChange={setExamName}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select exam type" />
+            </SelectTrigger>
+            <SelectContent>
+              {examTypes.map(type => (
+                <SelectItem key={type} value={type}>{type}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       
@@ -175,19 +219,19 @@ const ResultForm: React.FC<ResultFormProps> = ({ initialData, onClose }) => {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="semester">Semester</Label>
+          <Label htmlFor="semester">Academic Year</Label>
           <Select value={semester} onValueChange={setSemester}>
             <SelectTrigger>
-              <SelectValue placeholder="Select a semester" />
+              <SelectValue placeholder="Select academic year" />
             </SelectTrigger>
             <SelectContent>
               {/* Make sure no empty values in SelectItem */}
-              {semesters.length > 0 ? (
-                semesters.map(sem => (
-                  <SelectItem key={sem} value={sem}>{sem}</SelectItem>
+              {academicYears.length > 0 ? (
+                academicYears.map(year => (
+                  <SelectItem key={year} value={year}>{year}</SelectItem>
                 ))
               ) : (
-                <SelectItem value="default-semester">Default Semester</SelectItem>
+                <SelectItem value="2023-2024">2023-2024</SelectItem>
               )}
             </SelectContent>
           </Select>

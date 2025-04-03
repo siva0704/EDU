@@ -30,85 +30,85 @@ const sampleExamResults: ExamResult[] = [
   {
     id: '1',
     studentId: 'student-1',
-    subject: 'Mathematics 101',
-    examName: 'Mid-term Exam',
-    date: 'Mar 15, 2023',
+    subject: 'Mathematics',
+    examName: 'Unit Test 1',
+    date: 'Aug 15, 2023',
     score: 85,
     totalMarks: 100,
     grade: 'A',
-    semester: 'Spring 2023',
-    feedback: 'Excellent work on calculus problems.'
+    semester: '2023-2024',
+    feedback: 'Excellent understanding of numerical concepts.'
   },
   {
     id: '2',
     studentId: 'student-1',
-    subject: 'Physics 201',
-    examName: 'Quiz 1',
-    date: 'Feb 20, 2023',
+    subject: 'Hindi',
+    examName: 'Mid-Term Exam',
+    date: 'Sep 20, 2023',
     score: 42,
     totalMarks: 50,
     grade: 'B+',
-    semester: 'Spring 2023',
-    feedback: 'Good understanding of mechanics concepts.'
+    semester: '2023-2024',
+    feedback: 'Good writing skills, needs improvement in grammar.'
   },
   {
     id: '3',
     studentId: 'student-1',
-    subject: 'Chemistry 101',
-    examName: 'Final Exam',
-    date: 'May 10, 2023',
+    subject: 'English',
+    examName: 'Half-Yearly Assessment',
+    date: 'Dec 10, 2023',
     score: 72,
     totalMarks: 100,
     grade: 'B',
-    semester: 'Spring 2023',
-    feedback: 'Need improvement in organic chemistry.'
+    semester: '2023-2024',
+    feedback: 'Need improvement in comprehension skills.'
   },
   {
     id: '4',
     studentId: 'student-1',
-    subject: 'Computer Science 202',
-    examName: 'Project Presentation',
-    date: 'Apr 28, 2023',
+    subject: 'Science',
+    examName: 'Unit Test 2',
+    date: 'Nov 28, 2023',
     score: 95,
     totalMarks: 100,
     grade: 'A+',
-    semester: 'Spring 2023',
-    feedback: 'Outstanding project implementation and presentation.'
+    semester: '2023-2024',
+    feedback: 'Outstanding grasp of scientific concepts and application.'
   },
   {
     id: '5',
     studentId: 'student-1',
-    subject: 'Literature 101',
-    examName: 'Essay Submission',
-    date: 'Apr 05, 2023',
+    subject: 'Social Science',
+    examName: 'Final Exam',
+    date: 'Mar 05, 2024',
     score: 78,
     totalMarks: 100,
     grade: 'B+',
-    semester: 'Spring 2023',
-    feedback: 'Well-structured essay with good analysis.'
+    semester: '2023-2024',
+    feedback: 'Well-structured answers with good historical analysis.'
   },
   {
     id: '6',
     studentId: 'student-1',
-    subject: 'Mathematics 101',
-    examName: 'Final Exam',
-    date: 'May 20, 2023',
+    subject: 'Mathematics',
+    examName: 'Annual Assessment',
+    date: 'Mar 20, 2024',
     score: 90,
     totalMarks: 100,
     grade: 'A',
-    semester: 'Spring 2023',
+    semester: '2023-2024',
     feedback: 'Excellent performance overall.'
   },
   {
     id: '7',
     studentId: 'student-2', // This shouldn't show for student-1
-    subject: 'Physics 201',
-    examName: 'Mid-term Exam',
-    date: 'Mar 15, 2023',
+    subject: 'Hindi',
+    examName: 'Mid-Term Exam',
+    date: 'Sep 15, 2023',
     score: 75,
     totalMarks: 100,
     grade: 'B',
-    semester: 'Spring 2023'
+    semester: '2023-2024'
   },
 ];
 
@@ -129,8 +129,8 @@ const gradeColors: Record<string, string> = {
 const StudentExamResults: React.FC = () => {
   const { user } = useAuth();
   const { downloadSingleResource } = useDownloadUtils();
-  const [selectedSemester, setSelectedSemester] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState('all');
+  const [selectedSubject, setSelectedSubject] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   
@@ -141,13 +141,13 @@ const StudentExamResults: React.FC = () => {
   
   // Apply additional filters
   const filteredResults = studentResults.filter(result => {
-    const matchesSemester = selectedSemester === '' || result.semester === selectedSemester;
-    const matchesSubject = selectedSubject === '' || result.subject === selectedSubject;
+    const matchesAcademicYear = selectedAcademicYear === 'all' || result.semester === selectedAcademicYear;
+    const matchesSubject = selectedSubject === 'all' || result.subject === selectedSubject;
     const matchesSearch = searchTerm === '' || 
       result.examName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       result.subject.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesSemester && matchesSubject && matchesSearch;
+    return matchesAcademicYear && matchesSubject && matchesSearch;
   });
   
   // Calculate statistics
@@ -157,8 +157,8 @@ const StudentExamResults: React.FC = () => {
     : 0;
   
   // Get unique values for filters
-  const uniqueSemesters = Array.from(new Set(studentResults.map(result => result.semester)));
-  const uniqueSubjects = Array.from(new Set(studentResults.map(result => result.subject)));
+  const uniqueAcademicYears = [...new Set(studentResults.map(result => result.semester))];
+  const uniqueSubjects = [...new Set(studentResults.map(result => result.subject))];
   
   const handleExport = () => {
     downloadSingleResource({
@@ -246,14 +246,14 @@ const StudentExamResults: React.FC = () => {
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="w-full sm:w-40">
-            <Select value={selectedSemester} onValueChange={setSelectedSemester}>
+            <Select value={selectedAcademicYear} onValueChange={setSelectedAcademicYear}>
               <SelectTrigger>
-                <SelectValue placeholder="All Semesters" />
+                <SelectValue placeholder="All Academic Years" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Semesters</SelectItem>
-                {uniqueSemesters.map(semester => (
-                  <SelectItem key={semester} value={semester}>{semester}</SelectItem>
+                <SelectItem value="all">All Academic Years</SelectItem>
+                {uniqueAcademicYears.map(year => (
+                  <SelectItem key={year} value={year}>{year}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -265,7 +265,7 @@ const StudentExamResults: React.FC = () => {
                 <SelectValue placeholder="All Subjects" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Subjects</SelectItem>
+                <SelectItem value="all">All Subjects</SelectItem>
                 {uniqueSubjects.map(subject => (
                   <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                 ))}
