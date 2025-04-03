@@ -41,7 +41,7 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
     initialData?.enrollmentDate ? new Date(initialData.enrollmentDate) : new Date()
   );
   const [semester, setSemester] = useState(initialData?.semester || '');
-  const [yearOfStudy, setYearOfStudy] = useState(initialData?.yearOfStudy?.toString() || '1');
+  const [yearOfStudy, setYearOfStudy] = useState(initialData?.yearOfStudy?.toString() || 'A');
   const [isActive, setIsActive] = useState(initialData?.status !== 'inactive');
   
   const classes = [
@@ -85,7 +85,7 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
       department,
       enrollmentDate: enrollmentDate.toISOString().split('T')[0],
       semester,
-      yearOfStudy: parseInt(yearOfStudy),
+      yearOfStudy,
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${registrationNumber}`,
       status: isActive ? 'active' as const : 'inactive' as const
     };

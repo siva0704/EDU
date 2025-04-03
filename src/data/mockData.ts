@@ -67,6 +67,7 @@ export const mockStudents: Student[] = [
 
 // Create results based on students
 export const generateMockResults = (): ExamResult[] => {
+  // Define subjects for different class levels
   const primarySubjects = [
     'Hindi', 
     'English', 

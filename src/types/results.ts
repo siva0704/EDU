@@ -27,7 +27,7 @@ export interface Student {
   semester: string;
   avatar?: string;
   status: 'active' | 'inactive';
-  yearOfStudy: number;
+  yearOfStudy: string;
 }
 
 export type GradeType = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F';
