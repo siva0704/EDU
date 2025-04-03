@@ -1,80 +1,81 @@
 
 import React, { useState } from 'react';
-import { useResults } from '@/context/ResultsContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { DialogFooter } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Student } from '@/types/results';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { toast } from '@/components/ui/use-toast';
+import { Switch } from '@/components/ui/switch';
+import type { Student } from '@/types/results';
 
 interface StudentFormProps {
-  initialData: Student | null;
-  onClose: () => void;
+  initialData?: Student;
+  onSubmit: (student: Omit<Student, 'id'>) => void;
+  onCancel: () => void;
 }
 
-const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
-  const { addStudent, updateStudent } = useResults();
-  
+const generateRegistrationNumber = (): string => {
+  return `STU${new Date().getFullYear()}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+};
+
+const StudentForm: React.FC<StudentFormProps> = ({
+  initialData,
+  onSubmit,
+  onCancel
+}) => {
   const [name, setName] = useState(initialData?.name || '');
   const [email, setEmail] = useState(initialData?.email || '');
-  const [registrationNumber, setRegistrationNumber] = useState(initialData?.registrationNumber || '');
-  const [department, setDepartment] = useState(initialData?.department || '');
-  const [enrollmentDate, setEnrollmentDate] = useState<Date | undefined>(
+  const [registrationNumber, setRegistrationNumber] = useState(
+    initialData?.registrationNumber || generateRegistrationNumber()
+  );
+  const [department, setDepartment] = useState(initialData?.department || 'Class 1');
+  const [enrollmentDate, setEnrollmentDate] = useState<Date>(
     initialData?.enrollmentDate ? new Date(initialData.enrollmentDate) : new Date()
   );
-  const [semester, setSemester] = useState(initialData?.semester || '');
-  const [yearOfStudy, setYearOfStudy] = useState(initialData?.yearOfStudy?.toString() || 'A');
+  const [semester, setSemester] = useState(initialData?.semester || '2023-2024');
+  const [yearOfStudy, setYearOfStudy] = useState(initialData?.yearOfStudy || 'A');
   const [isActive, setIsActive] = useState(initialData?.status !== 'inactive');
   
   const classes = [
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    'Class 4',
-    'Class 5',
-    'Class 6',
-    'Class 7',
-    'Class 8',
-    'Class 9',
-    'Class 10'
+    { value: 'Class 1', label: 'Class 1' },
+    { value: 'Class 2', label: 'Class 2' },
+    { value: 'Class 3', label: 'Class 3' },
+    { value: 'Class 4', label: 'Class 4' },
+    { value: 'Class 5', label: 'Class 5' },
+    { value: 'Class 6', label: 'Class 6' },
+    { value: 'Class 7', label: 'Class 7' },
+    { value: 'Class 8', label: 'Class 8' },
+    { value: 'Class 9', label: 'Class 9' },
+    { value: 'Class 10', label: 'Class 10' }
   ];
   
-  const semesters = [
-    '2023-2024',
-    '2022-2023',
-    '2021-2022'
+  const sections = [
+    { value: 'A', label: 'Section A' },
+    { value: 'B', label: 'Section B' },
+    { value: 'C', label: 'Section C' },
+    { value: 'D', label: 'Section D' },
   ];
   
-  const validateEmail = (email: string) => {
-    return /\S+@\S+\.\S+/.test(email);
-  };
+  const academicYears = [
+    { value: '2023-2024', label: '2023-2024' },
+    { value: '2022-2023', label: '2022-2023' },
+    { value: '2021-2022', label: '2021-2022' },
+  ];
   
-  const handleSubmit = () => {
-    if (!name || !email || !registrationNumber || !department || !enrollmentDate || !semester || !yearOfStudy) {
-      alert('Please fill all required fields');
-      return;
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     
-    if (!validateEmail(email)) {
-      alert('Please enter a valid email address');
+    if (!name || !email || !department || !semester || !yearOfStudy) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
       return;
     }
     
@@ -90,67 +91,104 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
       status: isActive ? 'active' as const : 'inactive' as const
     };
     
-    if (initialData) {
-      updateStudent(initialData.id, studentData);
-    } else {
-      addStudent(studentData);
-    }
+    onSubmit(studentData);
     
-    onClose();
+    toast({
+      title: "Success",
+      description: `Student ${initialData ? 'updated' : 'created'} successfully.`,
+    });
   };
   
   return (
-    <div className="space-y-4 py-2">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label htmlFor="name">Full Name</Label>
-          <Input 
+          <Input
             id="name"
+            placeholder="Student's full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Student's full name"
+            required
           />
         </div>
         
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input 
+          <Input
             id="email"
             type="email"
+            placeholder="student@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="student@example.com"
-          />
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="registrationNumber">Registration Number</Label>
-          <Input 
-            id="registrationNumber"
-            value={registrationNumber}
-            onChange={(e) => setRegistrationNumber(e.target.value)}
-            placeholder="STU20230001"
+            required
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="department">Class</Label>
-          <Select value={department} onValueChange={setDepartment}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a class" />
+          <Label htmlFor="registration">Registration Number</Label>
+          <Input
+            id="registration"
+            value={registrationNumber}
+            onChange={(e) => setRegistrationNumber(e.target.value)}
+            disabled={!!initialData}
+            required
+          />
+          {!initialData && (
+            <p className="text-sm text-muted-foreground">
+              Auto-generated. You can change it if needed.
+            </p>
+          )}
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="class">Class</Label>
+          <Select value={department} onValueChange={setDepartment} required>
+            <SelectTrigger id="class">
+              <SelectValue placeholder="Select class" />
             </SelectTrigger>
             <SelectContent>
-              {classes.map(cls => (
-                <SelectItem key={cls} value={cls}>{cls}</SelectItem>
+              {classes.map((classOption) => (
+                <SelectItem key={classOption.value} value={classOption.value}>
+                  {classOption.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <div className="space-y-2">
+          <Label htmlFor="section">Section</Label>
+          <Select value={yearOfStudy} onValueChange={setYearOfStudy} required>
+            <SelectTrigger id="section">
+              <SelectValue placeholder="Select section" />
+            </SelectTrigger>
+            <SelectContent>
+              {sections.map((section) => (
+                <SelectItem key={section.value} value={section.value}>
+                  {section.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="academic-year">Academic Year</Label>
+          <Select value={semester} onValueChange={setSemester} required>
+            <SelectTrigger id="academic-year">
+              <SelectValue placeholder="Select academic year" />
+            </SelectTrigger>
+            <SelectContent>
+              {academicYears.map((year) => (
+                <SelectItem key={year.value} value={year.value}>
+                  {year.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
         <div className="space-y-2">
           <Label>Enrollment Date</Label>
           <Popover>
@@ -166,68 +204,33 @@ const StudentForm: React.FC<StudentFormProps> = ({ initialData, onClose }) => {
                 {enrollmentDate ? format(enrollmentDate, "PPP") : <span>Pick a date</span>}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0">
               <Calendar
                 mode="single"
                 selected={enrollmentDate}
-                onSelect={setEnrollmentDate}
+                onSelect={(date) => setEnrollmentDate(date || new Date())}
                 initialFocus
+                className="p-3 pointer-events-auto"
               />
             </PopoverContent>
           </Popover>
         </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="semester">Academic Year</Label>
-          <Select value={semester} onValueChange={setSemester}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select academic year" />
-            </SelectTrigger>
-            <SelectContent>
-              {semesters.map(sem => (
-                <SelectItem key={sem} value={sem}>{sem}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="yearOfStudy">Section</Label>
-          <Select value={yearOfStudy} onValueChange={setYearOfStudy}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select section" />
-            </SelectTrigger>
-            <SelectContent>
-              {['A', 'B', 'C', 'D'].map(section => (
-                <SelectItem key={section} value={section}>Section {section}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="flex items-center gap-2 pt-8">
-          <Switch 
-            id="status" 
-            checked={isActive} 
-            onCheckedChange={setIsActive} 
-          />
-          <Label htmlFor="status">Active Student</Label>
-        </div>
+      <div className="flex items-center space-x-2">
+        <Switch id="active-status" checked={isActive} onCheckedChange={setIsActive} />
+        <Label htmlFor="active-status">Active Student</Label>
       </div>
       
-      <Separator />
-      
-      <DialogFooter>
-        <Button variant="outline" onClick={onClose}>
+      <div className="flex justify-end space-x-2">
+        <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button onClick={handleSubmit}>
-          {initialData ? 'Update Student' : 'Add Student'}
+        <Button type="submit">
+          {initialData ? 'Update' : 'Create'} Student
         </Button>
-      </DialogFooter>
-    </div>
+      </div>
+    </form>
   );
 };
 

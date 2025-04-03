@@ -11,6 +11,7 @@ import { Progress } from '@/components/ui/progress';
 import { useDownloadUtils } from '@/utils/downloadUtils';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
+import { getSubjectsByClass, getExamTypesByClass } from '@/types/results';
 
 interface ExamResult {
   id: string;
@@ -31,7 +32,7 @@ const sampleExamResults: ExamResult[] = [
     id: '1',
     studentId: 'student-1',
     subject: 'Mathematics',
-    examName: 'Unit Test 1',
+    examName: 'Periodic Test 1',
     date: 'Aug 15, 2023',
     score: 85,
     totalMarks: 100,
@@ -43,7 +44,7 @@ const sampleExamResults: ExamResult[] = [
     id: '2',
     studentId: 'student-1',
     subject: 'Hindi',
-    examName: 'Mid-Term Exam',
+    examName: 'Half Yearly Exam',
     date: 'Sep 20, 2023',
     score: 42,
     totalMarks: 50,
@@ -55,7 +56,7 @@ const sampleExamResults: ExamResult[] = [
     id: '3',
     studentId: 'student-1',
     subject: 'English',
-    examName: 'Half-Yearly Assessment',
+    examName: 'Periodic Test 2',
     date: 'Dec 10, 2023',
     score: 72,
     totalMarks: 100,
@@ -66,32 +67,32 @@ const sampleExamResults: ExamResult[] = [
   {
     id: '4',
     studentId: 'student-1',
-    subject: 'Science',
-    examName: 'Unit Test 2',
+    subject: 'Environmental Science',
+    examName: 'Class Activities',
     date: 'Nov 28, 2023',
     score: 95,
     totalMarks: 100,
     grade: 'A+',
     semester: '2023-2024',
-    feedback: 'Outstanding grasp of scientific concepts and application.'
+    feedback: 'Outstanding participation and project work.'
   },
   {
     id: '5',
     studentId: 'student-1',
-    subject: 'Social Science',
-    examName: 'Final Exam',
+    subject: 'General Knowledge',
+    examName: 'Annual Exam',
     date: 'Mar 05, 2024',
     score: 78,
     totalMarks: 100,
     grade: 'B+',
     semester: '2023-2024',
-    feedback: 'Well-structured answers with good historical analysis.'
+    feedback: 'Good general awareness. Can improve in current affairs.'
   },
   {
     id: '6',
     studentId: 'student-1',
     subject: 'Mathematics',
-    examName: 'Annual Assessment',
+    examName: 'Annual Exam',
     date: 'Mar 20, 2024',
     score: 90,
     totalMarks: 100,
@@ -103,7 +104,7 @@ const sampleExamResults: ExamResult[] = [
     id: '7',
     studentId: 'student-2', // This shouldn't show for student-1
     subject: 'Hindi',
-    examName: 'Mid-Term Exam',
+    examName: 'Half Yearly Exam',
     date: 'Sep 15, 2023',
     score: 75,
     totalMarks: 100,
@@ -134,6 +135,15 @@ const StudentExamResults: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   
+  // Get class number from user's department (if available)
+  const classNumber = user?.department ? parseInt(user.department.split(' ')[1]) : 5;
+  
+  // Get appropriate subjects based on class
+  const subjectsForClass = getSubjectsByClass(classNumber);
+  
+  // Get appropriate exam types based on class
+  const examTypes = getExamTypesByClass(classNumber);
+  
   // Filter results to show only the current student's data
   const studentResults = sampleExamResults.filter(result => 
     result.studentId === user?.id
@@ -158,7 +168,6 @@ const StudentExamResults: React.FC = () => {
   
   // Get unique values for filters
   const uniqueAcademicYears = [...new Set(studentResults.map(result => result.semester))];
-  const uniqueSubjects = [...new Set(studentResults.map(result => result.subject))];
   
   const handleExport = () => {
     downloadSingleResource({
@@ -266,7 +275,7 @@ const StudentExamResults: React.FC = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Subjects</SelectItem>
-                {uniqueSubjects.map(subject => (
+                {subjectsForClass.map(subject => (
                   <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                 ))}
               </SelectContent>

@@ -22,12 +22,12 @@ export interface Student {
   name: string;
   email: string;
   registrationNumber: string;
-  department: string;
+  department: string; // This will represent class (e.g., "Class 5")
   enrollmentDate: string;
   semester: string;
   avatar?: string;
   status: 'active' | 'inactive';
-  yearOfStudy: string;
+  yearOfStudy: string; // Section like 'A', 'B', 'C', etc.
 }
 
 export type GradeType = 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F';
@@ -60,4 +60,73 @@ export const calculateGrade = (score: number, totalMarks: number): GradeType => 
   if (percentage >= 70) return 'C-';
   if (percentage >= 60) return 'D';
   return 'F';
+};
+
+// Helper function to get subjects by class
+export const getSubjectsByClass = (classNumber: number): string[] => {
+  // Primary classes (1-5)
+  if (classNumber >= 1 && classNumber <= 5) {
+    return [
+      'Hindi',
+      'English',
+      'Mathematics',
+      'Environmental Science',
+      'General Knowledge',
+      'Art & Craft',
+      'Physical Education'
+    ];
+  }
+  // Middle classes (6-8)
+  else if (classNumber >= 6 && classNumber <= 8) {
+    return [
+      'Hindi',
+      'English',
+      'Mathematics',
+      'Science',
+      'Social Science',
+      'Sanskrit',
+      'Computer Science',
+      'Art Education',
+      'Physical Education'
+    ];
+  }
+  // Secondary classes (9-10)
+  else if (classNumber >= 9 && classNumber <= 10) {
+    return [
+      'Hindi',
+      'English',
+      'Mathematics',
+      'Science',
+      'Social Science',
+      'Information Technology',
+      'Physical Education',
+      'Optional Subject' // Could be Sanskrit, Agriculture, Home Science, etc.
+    ];
+  }
+  return ['Unknown Subject'];
+};
+
+// Helper function to get exam types by class level
+export const getExamTypesByClass = (classNumber: number): string[] => {
+  // Primary classes (1-5) have simpler assessment structure
+  if (classNumber >= 1 && classNumber <= 5) {
+    return [
+      'Periodic Test 1',
+      'Periodic Test 2',
+      'Half Yearly Exam',
+      'Annual Exam',
+      'Class Activities'
+    ];
+  } 
+  // Higher classes have more formal examination structure
+  else {
+    return [
+      'Periodic Assessment 1',
+      'Periodic Assessment 2',
+      'Half Yearly Exam',
+      'Annual Exam', 
+      'Practical Exam',
+      'Project Work'
+    ];
+  }
 };

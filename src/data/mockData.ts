@@ -1,7 +1,7 @@
 
-import { ExamResult, Student, calculateGrade } from "@/types/results";
+import { ExamResult, Student, calculateGrade, getSubjectsByClass, getExamTypesByClass } from "@/types/results";
 
-// Mock student data
+// Mock student data with Indian education system classes
 export const mockStudents: Student[] = [
   {
     id: 'student-1',
@@ -62,68 +62,88 @@ export const mockStudents: Student[] = [
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student5',
     status: 'active',
     yearOfStudy: 'B'
+  },
+  {
+    id: 'student-6',
+    name: 'Neha Kapoor',
+    email: 'neha.kapoor@example.com',
+    registrationNumber: 'STU2023005',
+    department: 'Class 2',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student6',
+    status: 'active',
+    yearOfStudy: 'A'
+  },
+  {
+    id: 'student-7',
+    name: 'Amit Kumar',
+    email: 'amit.kumar@example.com',
+    registrationNumber: 'STU2023006',
+    department: 'Class 8',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student7',
+    status: 'active',
+    yearOfStudy: 'B'
+  },
+  {
+    id: 'student-8',
+    name: 'Riya Malhotra',
+    email: 'riya.malhotra@example.com',
+    registrationNumber: 'STU2023007',
+    department: 'Class 1',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student8',
+    status: 'active',
+    yearOfStudy: 'C'
+  },
+  {
+    id: 'student-9',
+    name: 'Karan Mehra',
+    email: 'karan.mehra@example.com',
+    registrationNumber: 'STU2023008',
+    department: 'Class 6',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student9',
+    status: 'active',
+    yearOfStudy: 'A'
+  },
+  {
+    id: 'student-10',
+    name: 'Divya Reddy',
+    email: 'divya.reddy@example.com',
+    registrationNumber: 'STU2023009',
+    department: 'Class 4',
+    enrollmentDate: '2023-04-01',
+    semester: '2023-2024',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=student10',
+    status: 'active',
+    yearOfStudy: 'B'
   }
 ];
 
 // Create results based on students
 export const generateMockResults = (): ExamResult[] => {
-  // Define subjects for different class levels
-  const primarySubjects = [
-    'Hindi', 
-    'English', 
-    'Mathematics', 
-    'Environmental Studies',
-    'General Knowledge'
-  ];
-  
-  const middleSubjects = [
-    'Hindi',
-    'English',
-    'Mathematics',
-    'Science',
-    'Social Studies',
-    'Sanskrit'
-  ];
-  
-  const highSubjects = [
-    'Hindi',
-    'English',
-    'Mathematics',
-    'Science',
-    'Social Science',
-    'Sanskrit/Computer'
-  ];
-  
-  const examNames = [
-    'Unit Test 1',
-    'Mid-Term Exam',
-    'Unit Test 2',
-    'Final Exam',
-    'Quarterly Assessment',
-    'Half-Yearly Assessment',
-    'Annual Assessment'
-  ];
-  
   const academicYears = ['2023-2024', '2022-2023', '2021-2022'];
   
   const results: ExamResult[] = [];
   let resultId = 1;
   
   mockStudents.forEach(student => {
-    // Assign 3-5 random exam results to each student
-    const numResults = Math.floor(Math.random() * 3) + 3;
-    
-    // Select appropriate subjects based on class
-    let subjectsForClass: string[] = [];
+    // Extract class number from department
     const classNumber = parseInt(student.department.split(' ')[1]);
     
-    if (classNumber <= 5) {
-      subjectsForClass = primarySubjects;
-    } else if (classNumber <= 8) {
-      subjectsForClass = middleSubjects;
-    } else {
-      subjectsForClass = highSubjects;
-    }
+    // Get appropriate subjects based on class
+    const subjectsForClass = getSubjectsByClass(classNumber);
+    
+    // Get appropriate exam types based on class
+    const examNames = getExamTypesByClass(classNumber);
+    
+    // Assign 3-5 random exam results to each student
+    const numResults = Math.floor(Math.random() * 3) + 3;
     
     for (let i = 0; i < numResults; i++) {
       const subject = subjectsForClass[Math.floor(Math.random() * subjectsForClass.length)];

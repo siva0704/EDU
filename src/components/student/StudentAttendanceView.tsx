@@ -12,11 +12,13 @@ import { format } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { getSubjectsByClass } from '@/types/results';
 
 export interface StudentAttendanceRecord {
   id: string;
   studentId: string;
   class: string;
+  subject: string;
   date: string;
   status: 'present' | 'absent' | 'late' | 'excused';
   timeIn?: string;
@@ -28,7 +30,8 @@ const sampleStudentAttendance: StudentAttendanceRecord[] = [
   {
     id: '1',
     studentId: 'student-1',
-    class: 'Mathematics 101',
+    class: 'Class 5',
+    subject: 'Mathematics',
     date: 'Apr 15, 2023',
     status: 'present',
     timeIn: '09:00 AM',
@@ -37,7 +40,8 @@ const sampleStudentAttendance: StudentAttendanceRecord[] = [
   {
     id: '2',
     studentId: 'student-1',
-    class: 'Physics 201',
+    class: 'Class 5',
+    subject: 'Hindi',
     date: 'Apr 16, 2023',
     status: 'late',
     timeIn: '09:15 AM',
@@ -46,7 +50,8 @@ const sampleStudentAttendance: StudentAttendanceRecord[] = [
   {
     id: '3',
     studentId: 'student-1',
-    class: 'Chemistry 101',
+    class: 'Class 5',
+    subject: 'Environmental Science',
     date: 'Apr 17, 2023',
     status: 'absent',
     timeIn: undefined,
@@ -55,7 +60,8 @@ const sampleStudentAttendance: StudentAttendanceRecord[] = [
   {
     id: '4',
     studentId: 'student-1',
-    class: 'Computer Science 202',
+    class: 'Class 5',
+    subject: 'English',
     date: 'Apr 18, 2023',
     status: 'present',
     timeIn: '09:02 AM',
@@ -64,7 +70,8 @@ const sampleStudentAttendance: StudentAttendanceRecord[] = [
   {
     id: '5',
     studentId: 'student-1',
-    class: 'Literature 101',
+    class: 'Class 5',
+    subject: 'General Knowledge',
     date: 'Apr 19, 2023',
     status: 'excused',
     timeIn: undefined,
@@ -73,7 +80,8 @@ const sampleStudentAttendance: StudentAttendanceRecord[] = [
   {
     id: '6',
     studentId: 'student-2', // This shouldn't show for student-1
-    class: 'Mathematics 101',
+    class: 'Class 3',
+    subject: 'Mathematics',
     date: 'Apr 15, 2023',
     status: 'present',
     timeIn: '08:55 AM',
@@ -85,7 +93,7 @@ const StudentAttendanceView: React.FC = () => {
   const { user } = useAuth();
   const { downloadSingleResource } = useDownloadUtils();
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [selectedClass, setSelectedClass] = useState('all-classes');
+  const [selectedSubject, setSelectedSubject] = useState('all-subjects');
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
   
@@ -94,11 +102,17 @@ const StudentAttendanceView: React.FC = () => {
     record.studentId === user?.id
   );
   
+  // Get class number from user's department (if available)
+  const classNumber = user?.department ? parseInt(user.department.split(' ')[1]) : 5;
+  
+  // Get appropriate subjects based on class
+  const subjectsForClass = getSubjectsByClass(classNumber);
+  
   // Apply additional filters
   const filteredRecords = studentRecords.filter(record => {
-    const matchesClass = selectedClass === 'all-classes' || record.class === selectedClass;
+    const matchesSubject = selectedSubject === 'all-subjects' || record.subject === selectedSubject;
     const matchesDate = !date || record.date === format(date, 'MMM d, yyyy');
-    return matchesClass && matchesDate;
+    return matchesSubject && matchesDate;
   });
   
   const indexOfLastRecord = currentPage * recordsPerPage;
@@ -155,9 +169,6 @@ const StudentAttendanceView: React.FC = () => {
       });
     }
   };
-  
-  // Get unique class names for the filter
-  const uniqueClasses = Array.from(new Set(studentRecords.map(record => record.class)));
   
   return (
     <div className="space-y-6">
@@ -226,14 +237,14 @@ const StudentAttendanceView: React.FC = () => {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="w-full sm:w-48">
-          <Select value={selectedClass} onValueChange={setSelectedClass}>
+          <Select value={selectedSubject} onValueChange={setSelectedSubject}>
             <SelectTrigger>
-              <SelectValue placeholder="All Classes" />
+              <SelectValue placeholder="All Subjects" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all-classes">All Classes</SelectItem>
-              {uniqueClasses.map(className => (
-                <SelectItem key={className} value={className}>{className}</SelectItem>
+              <SelectItem value="all-subjects">All Subjects</SelectItem>
+              {subjectsForClass.map(subject => (
+                <SelectItem key={subject} value={subject}>{subject}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -252,6 +263,7 @@ const StudentAttendanceView: React.FC = () => {
               selected={date}
               onSelect={handleDateSelect}
               initialFocus
+              className="p-3 pointer-events-auto"
             />
           </PopoverContent>
         </Popover>
@@ -270,7 +282,7 @@ const StudentAttendanceView: React.FC = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 dark:bg-slate-800/50 text-left">
-                <th className="p-3 font-medium">Class</th>
+                <th className="p-3 font-medium">Subject</th>
                 <th className="p-3 font-medium">Date</th>
                 <th className="p-3 font-medium">Status</th>
                 <th className="p-3 font-medium">Time In</th>
@@ -281,7 +293,7 @@ const StudentAttendanceView: React.FC = () => {
               {currentRecords.length > 0 ? (
                 currentRecords.map((record) => (
                   <tr key={record.id} className="border-t hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="p-3">{record.class}</td>
+                    <td className="p-3">{record.subject}</td>
                     <td className="p-3">{record.date}</td>
                     <td className="p-3">
                       <span className={cn("px-2 py-1 rounded-full text-xs capitalize", getStatusColor(record.status))}>

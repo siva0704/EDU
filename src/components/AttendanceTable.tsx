@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Calendar, Search, Download, Filter, ChevronLeft, ChevronRight, Edit } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -15,6 +16,7 @@ export interface AttendanceRecord {
   student: string;
   status: 'present' | 'absent' | 'late' | 'excused';
   class: string;
+  subject: string; // Added subject field
   date: string;
   timeIn?: string;
   timeOut?: string;
@@ -39,7 +41,8 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records, onEdit }) =>
   
   const filteredRecords = records.filter(record => 
     record.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    record.class.toLowerCase().includes(searchTerm.toLowerCase())
+    record.class.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    record.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
   const indexOfLastRecord = currentPage * recordsPerPage;
@@ -107,7 +110,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records, onEdit }) =>
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Search student or class..."
+              placeholder="Search student, class, or subject..."
               className="w-full h-10 pl-9 pr-3 rounded-lg border bg-transparent focus:outline-none focus:ring-1 focus:ring-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -128,6 +131,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records, onEdit }) =>
                   selected={date}
                   onSelect={handleDateSelect}
                   initialFocus
+                  className="p-3 pointer-events-auto"
                 />
               </PopoverContent>
             </Popover>
@@ -150,6 +154,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records, onEdit }) =>
               <tr className="bg-slate-50 dark:bg-slate-800/50 text-left">
                 <th className="p-3 font-medium">Student</th>
                 <th className="p-3 font-medium">Class</th>
+                <th className="p-3 font-medium">Subject</th>
                 <th className="p-3 font-medium">Date</th>
                 <th className="p-3 font-medium">Status</th>
                 <th className="p-3 font-medium">Time In</th>
@@ -162,6 +167,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({ records, onEdit }) =>
                 <tr key={record.id} className="border-t hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="p-3">{record.student}</td>
                   <td className="p-3">{record.class}</td>
+                  <td className="p-3">{record.subject}</td>
                   <td className="p-3">{record.date}</td>
                   <td className="p-3">
                     <span className={cn("px-2 py-1 rounded-full text-xs capitalize", getStatusColor(record.status))}>

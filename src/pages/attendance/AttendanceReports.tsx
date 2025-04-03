@@ -26,16 +26,25 @@ const statusData = [
 ];
 
 const classData = [
-  { name: 'Anatomy', present: 95, absent: 10, late: 15 },
-  { name: 'Physiology', present: 88, absent: 12, late: 20 },
-  { name: 'Pathology', present: 80, absent: 15, late: 25 },
-  { name: 'Microbiology', present: 90, absent: 8, late: 22 },
-  { name: 'Pharmacology', present: 85, absent: 10, late: 25 },
+  { name: 'Class 1', present: 95, absent: 10, late: 15 },
+  { name: 'Class 3', present: 88, absent: 12, late: 20 },
+  { name: 'Class 5', present: 80, absent: 15, late: 25 },
+  { name: 'Class 7', present: 90, absent: 8, late: 22 },
+  { name: 'Class 9', present: 85, absent: 10, late: 25 },
+];
+
+const subjectData = [
+  { name: 'Mathematics', present: 92, absent: 8, late: 10 },
+  { name: 'Hindi', present: 88, absent: 10, late: 12 },
+  { name: 'English', present: 85, absent: 12, late: 13 },
+  { name: 'Science', present: 90, absent: 7, late: 13 },
+  { name: 'Social Science', present: 84, absent: 11, late: 15 },
 ];
 
 const AttendanceReports = () => {
   const [reportType, setReportType] = useState('weekly');
   const [selectedClass, setSelectedClass] = useState('all');
+  const [selectedSubject, setSelectedSubject] = useState('all');
   
   return (
     <div className="flex min-h-screen bg-background">
@@ -104,19 +113,42 @@ const AttendanceReports = () => {
                     <CardTitle>Weekly Attendance Overview</CardTitle>
                     <CardDescription>Attendance patterns for this week</CardDescription>
                   </div>
-                  <Select value={selectedClass} onValueChange={setSelectedClass}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select class" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Classes</SelectItem>
-                      <SelectItem value="anatomy">Anatomy</SelectItem>
-                      <SelectItem value="physiology">Physiology</SelectItem>
-                      <SelectItem value="pathology">Pathology</SelectItem>
-                      <SelectItem value="microbiology">Microbiology</SelectItem>
-                      <SelectItem value="pharmacology">Pharmacology</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex gap-2">
+                    <Select value={selectedClass} onValueChange={setSelectedClass}>
+                      <SelectTrigger className="w-[140px]">
+                        <SelectValue placeholder="Select class" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Classes</SelectItem>
+                        <SelectItem value="class1">Class 1</SelectItem>
+                        <SelectItem value="class2">Class 2</SelectItem>
+                        <SelectItem value="class3">Class 3</SelectItem>
+                        <SelectItem value="class4">Class 4</SelectItem>
+                        <SelectItem value="class5">Class 5</SelectItem>
+                        <SelectItem value="class6">Class 6</SelectItem>
+                        <SelectItem value="class7">Class 7</SelectItem>
+                        <SelectItem value="class8">Class 8</SelectItem>
+                        <SelectItem value="class9">Class 9</SelectItem>
+                        <SelectItem value="class10">Class 10</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+                      <SelectTrigger className="w-[140px]">
+                        <SelectValue placeholder="Select subject" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Subjects</SelectItem>
+                        <SelectItem value="hindi">Hindi</SelectItem>
+                        <SelectItem value="english">English</SelectItem>
+                        <SelectItem value="mathematics">Mathematics</SelectItem>
+                        <SelectItem value="science">Science</SelectItem>
+                        <SelectItem value="socialScience">Social Science</SelectItem>
+                        <SelectItem value="sanskrit">Sanskrit</SelectItem>
+                        <SelectItem value="computerScience">Computer Science</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="pl-2">
@@ -163,26 +195,58 @@ const AttendanceReports = () => {
             </Card>
           </div>
           
-          <Card>
-            <CardHeader>
-              <CardTitle>Attendance by Class</CardTitle>
-              <CardDescription>Compare attendance rates across different classes</CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={classData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="present" fill="#22c55e" />
-                  <Bar dataKey="absent" fill="#ef4444" />
-                  <Bar dataKey="late" fill="#f97316" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <Tabs defaultValue="class" className="mb-6">
+            <TabsList className="mb-4">
+              <TabsTrigger value="class">Attendance by Class</TabsTrigger>
+              <TabsTrigger value="subject">Attendance by Subject</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="class">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Attendance by Class</CardTitle>
+                  <CardDescription>Compare attendance rates across different classes</CardDescription>
+                </CardHeader>
+                <CardContent className="pl-2">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={classData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="present" fill="#22c55e" />
+                      <Bar dataKey="absent" fill="#ef4444" />
+                      <Bar dataKey="late" fill="#f97316" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="subject">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Attendance by Subject</CardTitle>
+                  <CardDescription>Compare attendance rates across different subjects</CardDescription>
+                </CardHeader>
+                <CardContent className="pl-2">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={subjectData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="present" fill="#22c55e" />
+                      <Bar dataKey="absent" fill="#ef4444" />
+                      <Bar dataKey="late" fill="#f97316" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </main>
       </div>
     </div>
